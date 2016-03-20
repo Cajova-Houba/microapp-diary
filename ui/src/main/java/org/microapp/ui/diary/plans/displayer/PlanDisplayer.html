@@ -1,0 +1,16 @@
+<wicket:panel>
+	<h3 id="pdHeader"><wicket:message key="pd.header" /></h3>
+	
+	
+	<form wicket:id="searchForm">
+		<input type="checkbox" wicket:id="completed"> completed
+		<input type="checkbox" wicket:id="uncompleted">uncompleted
+		<input type="button" value="Show!" id="commonButton" wicket:id="btnShow">
+	</form>
+	
+	<div wicket:id="planTable" id="table">
+	</div>
+	
+	<button id="commonButton" wicket:id="addPlanButton"><wicket:message key="addPlanButton.caption" /></button>
+	<button id="commonButton"><wicket:message key="reportButton.caption" /></button>
+</wicket:panel>

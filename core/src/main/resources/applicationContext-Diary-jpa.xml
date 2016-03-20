@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="true">
+
+	<import resource="classpath:applicationContext-Diary-resources.xml"/>
+	
+	<!-- session factory -->
+	<bean id="sessionFactoryDiary" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceDiary"/>
+        <property name="configLocation" value="classpath:hibernate-Diary.cfg.xml"/>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=${hibernate.dialect}
+                hibernate.query.substitutions=true 'Y', false 'N'
+                hibernate.max_fetch_depth=3
+                hibernate.jdbc.batch_size=20
+            </value>
+        </property>
+	</bean>
+
+    <!-- Needed so the @PersistenceUnit annotation is recognized -->
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
+
+	<!-- for @Transactional annotations -->
+	<tx:annotation-driven transaction-manager="transactionManagerDiary"/>
+    <!-- Transaction manager for a single EntityManagerFactory (alternative to JTA) -->
+    <bean id="transactionManagerDiary" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	    <property name="dataSource" ref="dataSourceDiary"/>
+	</bean>
+
+    <!-- Activates scanning of @Autowired -->
+    <context:annotation-config/>
+
+	<!-- DAOs -->
+    <bean id="dailyRecordDao" class="org.microapp.Diary.dao.hibernate.DailyRecordDaoHibernate">
+    </bean>
+    
+    <bean id="planDao" class="org.microapp.Diary.dao.hibernate.PlanDaoHibernate">
+    </bean>
+    
+    <bean id="goalDao" class="org.microapp.Diary.dao.hibernate.GoalDaoHibernate">
+    </bean>
+    
+    <bean id="activityDao" class="org.microapp.Diary.generic.dao.hibernate.GenericDaoHibernate">
+    	<constructor-arg value="org.microapp.Diary.model.Activity" />
+    </bean> 
+    
+    <bean id="memberInfoDao" class="org.microapp.Diary.generic.dao.hibernate.GenericAccessDaoHibernate">
+    	<constructor-arg value="org.microapp.Diary.model.MemberInfo"/>
+    </bean>
+    
+    <!-- managers -->
+    <bean id="dailyRecordManager" class="org.microapp.Diary.service.impl.DailyRecordManagerImpl">
+    </bean>
+    
+    <bean id="planManager" class="org.microapp.Diary.service.impl.PlanManagerImpl">
+    </bean>
+    
+    <bean id="goalManager" class="org.microapp.Diary.service.impl.GoalManagerImpl">
+    </bean>
+    
+    <bean id="activityManager" class="org.microapp.Diary.service.impl.ActivityManagerImpl">
+    </bean>
+
+	<bean id="reportManager" class="org.microapp.Diary.service.impl.ReportManagerImpl">
+	</bean>
+	
+	<bean id="memberInfoManager" class="org.microapp.Diary.service.impl.MemberInfoManagerImpl">
+	</bean>
+	
+</beans>

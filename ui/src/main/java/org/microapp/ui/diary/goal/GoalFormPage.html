@@ -1,0 +1,38 @@
+<wicket:extend>
+	<div id="contentDiv">
+		<form wicket:id="goalForm" id="goalForm">
+			<h3 wicket:id="header">Goal</h3>
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" wicket:id="name"></td>
+				</tr>
+				<tr>
+					<td>Activity type:</td>
+					<td>
+						<select form="goalForm" wicket:id="activityType">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Value:</td>
+					<td><input type="number" wicket:id="value"></td>
+				</tr>
+				<tr>
+					<td>Unit:</td>
+					<td>
+						<select form="goalForm" wicket:id="activityUnit">
+						</select>
+					</td>
+				</tr>
+			</table>
+			
+			<div wicket:id="feedbackPanel">
+			</div>
+			
+			<input type="submit" value="Save" id="commonButton">
+			<input type="submit" value="Cancel" id="commonButton" wicket:id="cancelButton">
+			<input type="submit" value="Delete" id="commonButton" wicket:id="deleteButton">
+		</form>
+	</div>
+</wicket:extend>

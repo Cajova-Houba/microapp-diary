@@ -1,0 +1,17 @@
+<wicket:extend>
+	<div id="contentDiv">
+		<button id="commonButton" wicket:id="backButton"><wicket:message key="btnBack.caption" /></button><br> 
+		<h3 wicket:id="planName"></h3>
+		From: <span style="font-weight: bold;" wicket:id="planFrom"></span><br>
+		To: <span style="font-weight: bold;" wicket:id="planTo"></span><br>
+		<a wicket:id="editPlan">Edit</a><br>
+		<a wicket:id="markAsCompl">Mark as completed</a><br>
+		
+		
+		<h4>Goals:</h4>
+		<div wicket:id="goalTable" id="table">
+		</div>
+		
+		<button id="commonButton" wicket:id="btnNewGoal" ><wicket:message key="addGoal.caption" /></button>
+	</div>
+</wicket:extend>

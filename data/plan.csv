@@ -1,0 +1,4 @@
+id,person_id,startDate,endDate,name,completed
+1,1,2016-1-1,2017-1-1,Sport plan 1,false
+2,1,2016-1-1,2017-1-1,Sport plan 2,false
+3,1,2016-1-1,2017-1-1,Sport plan 3,true

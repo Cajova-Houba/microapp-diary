@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>microapp-diary-membernet</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <name>Membernet Utils</name>
+  
+	<parent> 
+    	<groupId>org.microapp</groupId>
+		<artifactId>microapp-diary</artifactId>
+		<version>0.1</version>
+    </parent>
+
+  <properties>
+  		<spring.version>4.2.3.RELEASE</spring.version>
+  		<hibernate.version>3.6.7.Final</hibernate.version>
+  		<hibernate-search.version>4.5.1.Final</hibernate-search.version>
+  		<junit.version>4.12</junit.version>
+  </properties>
+  
+  
+  <dependencies>
+  		
+  		<!-- Logging -->
+  		<dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>${junit.version}</version>
+	      <scope>test</scope>
+	    </dependency>
+  		
+  		
+  		<!-- Java EE -->
+  		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+		</dependency>
+
+  
+  		<!-- Spring framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-aop</artifactId>
+		    <version>${spring.version}</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.springframework</groupId>
+    		<artifactId>spring-test</artifactId>
+    		<version>${spring.version}</version>
+    	</dependency>
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+        </dependency>
+  		<dependency>
+    		<groupId>org.springframework</groupId>
+    		<artifactId>spring-test</artifactId>
+    		<version>${spring.version}</version>
+    	</dependency>
+  		
+  		<!-- validation bean -->
+  		<dependency>
+	        <groupId>javax.validation</groupId>
+	        <artifactId>validation-api</artifactId>
+	        <version>1.0.0.GA</version>
+	    </dependency>
+	    <dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+
+  		
+  		<!-- MN core -->
+	    <dependency>
+			<groupId>com.yoso.membernet</groupId>
+	        <artifactId>membernet-micro-core</artifactId>
+	        <version>0.7.15-SNAPSHOT</version>
+		</dependency>
+		
+		
+		
+  </dependencies>
+  
+  
+</project>

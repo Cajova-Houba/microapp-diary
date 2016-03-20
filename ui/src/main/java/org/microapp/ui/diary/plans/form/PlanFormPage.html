@@ -1,0 +1,24 @@
+<wicket:extend>
+	<div id="contentDiv">
+		<form wicket:id = "planForm">
+			<h3 wicket:id="header"></h3>
+			<table>
+				<tr>
+					<td>Name: </td>
+					<td><input type="text" wicket:id="name"></td>
+				</tr>
+				<tr>
+					<td>Starts: </td>
+					<td><span wicket:id="startDate"></span></td>
+				</tr>
+				<tr>
+					<td>Ends: </td>
+					<td><span wicket:id="endDate"></span></td>
+				</tr>
+			</table>
+			<input type="submit" id="commonButton" wicket:message="value:save.caption">
+			<input type="submit" id="commonButton" wicket:message="value:cancel.caption" wicket:id="cancelButton">
+			<input type="submit" id="commonButton" wicket:message="value:delete.caption" wicket:id="deleteButton">
+		</form>
+	</div>
+</wicket:extend>

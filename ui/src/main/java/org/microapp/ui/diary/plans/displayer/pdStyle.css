@@ -1,0 +1,19 @@
+#planTable table {
+	width: 100%;
+	border-collapse: collapse;
+	
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#planTable td {
+	text-align: center;
+}
+
+#planTable th {
+	color: #FF6600;
+	font-size: 1.4em;
+	font-family: 'Yanone Kaffeesatz';
+	
+	border-bottom: 1px solid black;
+}

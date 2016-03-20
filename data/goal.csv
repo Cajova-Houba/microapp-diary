@@ -1,0 +1,4 @@
+id,activityType,value,name,planId,completed,progress
+1,Running,10,Running 1,1,false,0.5
+2,Running,10,Running 2,2,false,0.3
+3,Running,10,Running 3,3,true,1

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    	<mapping class="org.microapp.Diary.model.DailyRecord"/>
+    	<mapping class="org.microapp.Diary.model.Activity"/>
+    	<mapping class="org.microapp.Diary.model.Goal"/>
+    	<mapping class="org.microapp.Diary.model.Plan"/>
+    	<mapping class="org.microapp.Diary.model.MemberInfo"/>
+    </session-factory>
+</hibernate-configuration>

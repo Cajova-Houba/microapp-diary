@@ -1,0 +1,140 @@
+<table name="activity">
+	<column>id</column>
+	<column>activityType</column>
+	<column>value</column>
+	<column>name</column>
+	<column>dailyRecordId</column>
+	<row>
+			<value description="id">1</value>
+			<value description="activityType">Running</value>
+			<value description="value">0.5</value>
+			<value description="name">running</value>
+			<value description="dailyRecordId">1</value>
+	</row>
+	<row>
+			<value description="id">2</value>
+			<value description="activityType">Swimming</value>
+			<value description="value">1</value>
+			<value description="name">swimming</value>
+			<value description="dailyRecordId">2</value>
+	</row>
+</table>
+
+
+<table name="dailyRecord">
+	<column>id</column>
+	<column>person_id</column>
+	<column>date</column>
+	<row>
+			<value description="id">1</value>
+			<value description="person_id">1</value>
+			<value description="date">2016-1-1</value>
+	</row>
+	<row>
+			<value description="id">2</value>
+			<value description="person_id">1</value>
+			<value description="date">2016-1-1</value>
+	</row>
+</table>
+
+
+<table name="goal">
+	<column>id</column>
+	<column>activityType</column>
+	<column>value</column>
+	<column>name</column>
+	<column>planId</column>
+	<column>completed</column>
+	<column>progress</column>
+	<row>
+			<value description="id">1</value>
+			<value description="activityType">Running</value>
+			<value description="value">10</value>
+			<value description="name">Running 1</value>
+			<value description="planId">1</value>
+			<value description="completed">false</value>
+			<value description="progress">0.5</value>
+	</row>
+	<row>
+			<value description="id">2</value>
+			<value description="activityType">Running</value>
+			<value description="value">10</value>
+			<value description="name">Running 2</value>
+			<value description="planId">2</value>
+			<value description="completed">false</value>
+			<value description="progress">0.3</value>
+	</row>
+	<row>
+			<value description="id">3</value>
+			<value description="activityType">Running</value>
+			<value description="value">10</value>
+			<value description="name">Running 3</value>
+			<value description="planId">3</value>
+			<value description="completed">true</value>
+			<value description="progress">1</value>
+	</row>
+</table>
+
+
+<table name="memberInfo">
+	<column>id</column>
+	<column>person_id</column>
+	<column>full_name</column>
+	<column>diary_enabled</column>
+	<row>
+			<value description="id">1</value>
+			<value description="person_id">1</value>
+			<value description="full_name">John Smith</value>
+			<value description="diary_enabled">true</value>
+	</row>
+</table>
+
+
+<table name="member_info">
+	<column>id</column>
+	<column>person_id</column>
+	<column>full_name</column>
+	<column>diary_enabled</column>
+	<row>
+			<value description="id">1</value>
+			<value description="person_id">1</value>
+			<value description="full_name">John Smith</value>
+			<value description="diary_enabled">true</value>
+	</row>
+</table>
+
+
+<table name="plan">
+	<column>id</column>
+	<column>person_id</column>
+	<column>startDate</column>
+	<column>endDate</column>
+	<column>name</column>
+	<column>completed</column>
+	<row>
+			<value description="id">1</value>
+			<value description="person_id">1</value>
+			<value description="startDate">2016-1-1</value>
+			<value description="endDate">2017-1-1</value>
+			<value description="name">Sport plan 1</value>
+			<value description="completed">false</value>
+	</row>
+	<row>
+			<value description="id">2</value>
+			<value description="person_id">1</value>
+			<value description="startDate">2016-1-1</value>
+			<value description="endDate">2017-1-1</value>
+			<value description="name">Sport plan 2</value>
+			<value description="completed">false</value>
+	</row>
+	<row>
+			<value description="id">3</value>
+			<value description="person_id">1</value>
+			<value description="startDate">2016-1-1</value>
+			<value description="endDate">2017-1-1</value>
+			<value description="name">Sport plan 3</value>
+			<value description="completed">true</value>
+	</row>
+</table>
+
+
