@@ -29,7 +29,7 @@ public class GenericAccessDaoHibernate<T extends BaseAccessObject, PK extends Se
 	public List<T> getAllForPerson(PK personId) {
 		String query = "SELECT obj FROM "+getPersistentClass().getName()+ " obj WHERE "+BaseAccessObject.ACCESS_ID_COLUMN_NAME+"=?";
 		Map<Object, Object> parameters = new HashMap<Object, Object>(1);
-		parameters.put(1, personId);
+		parameters.put(0, personId);
 		
 		return find(query, parameters);
 	}

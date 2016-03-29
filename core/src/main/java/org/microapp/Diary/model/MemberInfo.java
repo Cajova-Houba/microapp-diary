@@ -1,5 +1,6 @@
 package org.microapp.Diary.model;
 
+import java.nio.channels.MembershipKey;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -7,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.microapp.Diary.generic.model.BaseAccessObject;
+
+import com.yoso.dev.membernet.membership.domain.Membership;
 
 /**
  * Basic informations about member.
@@ -31,6 +34,17 @@ public class MemberInfo extends BaseAccessObject {
 	 */
 	@Column(name="diary_enabled")
 	private boolean diaryEnabled;
+	
+	public MemberInfo() {
+		super();
+		diaryEnabled = true;
+	}
+	
+	public MemberInfo(Membership membership) {
+		this();
+		this.personId = membership.getId();
+		this.fullName = membership.getFullName();
+	}
 	
 	/**
 	 * Marks the diary as enabled.

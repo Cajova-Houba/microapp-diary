@@ -9,6 +9,7 @@ import net.sf.jasperreports.engine.xml.JRPenFactory.Bottom;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.membernet.MembernetManager;
@@ -18,6 +19,8 @@ import org.microapp.ui.base.GenericPage;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.GenericTable;
+import org.microapp.ui.diary.coach.plans.MultiplePlansPage;
+import org.microapp.ui.diary.coach.report.CompleteReportPage;
 
 import com.yoso.dev.membernet.membership.domain.Membership;
 import com.yoso.dev.membernet.society.domain.Society;
@@ -26,6 +29,8 @@ public class CoachPage extends GenericPage{
 	
 	private final String HEADER_ID = "socName";
 	private final String TABLE_ID = "membersTable";
+	private final String COMPLETE_REPORT_ID = "complReportButton";
+	private final String MULTIPLE_PLANS_ID = "multiplePlansButton";
 	
 	@SpringBean
 	private MembernetManager membernetManager;
@@ -70,6 +75,8 @@ public class CoachPage extends GenericPage{
 		super.addComponents();
 		addHeader();
 		addMembersTable();
+		addCompleteReportButton();
+		addMultiplePLansButton();
 	}
 	
 	private void addHeader() {
@@ -87,6 +94,27 @@ public class CoachPage extends GenericPage{
 			MembersTable membersTable = new MembersTable(TABLE_ID, Membership.class, values, fieldNames, null);
 			add(membersTable);
 		}
+	}
+	
+	private void addCompleteReportButton() {
+		Link l = new Link(COMPLETE_REPORT_ID) {
+			@Override
+			public void onClick() {
+				setResponsePage(CompleteReportPage.class);
+			}
+		};
+		add(l);
+	}
+	
+	private void addMultiplePLansButton() {
+		Link l = new Link(MULTIPLE_PLANS_ID) {
+			@Override
+			public void onClick() {
+				setResponsePage(MultiplePlansPage.class);
+			}
+		};
+		
+		add(l);
 	}
 	
 	public class MembersTable extends GenericTable {

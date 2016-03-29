@@ -8,15 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.logging.log4j.LogManager;
@@ -36,17 +33,21 @@ public class ReportManagerImpl implements ReportManager {
 	/**
 	 * Path to the plan template.
 	 */
-	private final String planTemplate = "src/main/resources/reportTemplates/PlanTemplate.xml";
+	//use it for tests
+//	private final String planTemplate = "src/main/resources/reportTemplates/PlanTemplate.xml";
+	private final String planTemplate = "reportTemplates/PlanTemplate.xml";
 	
 	/**
 	 * Path to the daily record template.
 	 */
-	private final String dailyRecordTemplate = "src/main/resources/reportTemplates/DailyRecordTemplate.xml";
+//	private final String dailyRecordTemplate = "src/main/resources/reportTemplates/DailyRecordTemplate.xml";
+	private final String dailyRecordTemplate = "reportTemplates/DailyRecordTemplate.xml";
 	
 	/**
 	 * Path to the activity template.
 	 */
-	private final String activityTemplate = "src/main/resources/reportTemplates/ActivityTemplate.xml";
+//	private final String activityTemplate = "src/main/resources/reportTemplates/ActivityTemplate.xml";
+	private final String activityTemplate = "reportTemplates/ActivityTemplate.xml";
 	
 	@Autowired
 	private PlanManager planManager;
@@ -157,6 +158,16 @@ public class ReportManagerImpl implements ReportManager {
 		}
 		
 		return planReport;
+	}
+
+	@Override
+	public byte[] exportToPdf(JasperPrint print) {
+		try {
+			return JasperExportManager.exportReportToPdf(print);
+		} catch (JRException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	

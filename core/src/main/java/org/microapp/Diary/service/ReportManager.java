@@ -52,4 +52,11 @@ public interface ReportManager {
 	 * @return Jasper print object which can then be exported to varius formats. If error occurs during reporting, null is returned.
 	 */
 	public JasperPrint makeCompleteReport(long personId, Date planAfter, Date planBefore, boolean completed, boolean uncompleted, Date drAfter, Date drBefore);
+	
+	/**
+	 * Exports the print to the pdf file.
+	 * @param print Print to be exported.
+	 * @return Pdf file as a byte array. Null when there's some error.
+	 */
+	public byte[] exportToPdf(JasperPrint print);
 }

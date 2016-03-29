@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class ActivityManagerImpl extends GenericManagerImpl<Activity, Long> implements ActivityManager{
 	
 	@Autowired
-	public ActivityManagerImpl(@Qualifier("activityDao")GenericDao<Activity, Long> actDao) {
+	public ActivityManagerImpl(@Qualifier("dailyActivityDao")GenericDao<Activity, Long> actDao) {
 		super(actDao);
 	}
 

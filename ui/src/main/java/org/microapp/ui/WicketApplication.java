@@ -10,13 +10,18 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.microapp.ui.base.converters.SqlDateConverter;
-import org.microapp.ui.diary.activity.ActivityFormPage;
+import org.microapp.ui.diary.activity.DailyActivityPage;
+import org.microapp.ui.diary.activity.form.ActivityFormPage;
+import org.microapp.ui.diary.activity.report.DailyRecordReportPage;
 import org.microapp.ui.diary.coach.CoachPage;
-import org.microapp.ui.diary.dailyActivity.DailyActivityPage;
+import org.microapp.ui.diary.coach.plans.MultiplePlansPage;
+import org.microapp.ui.diary.coach.report.CompleteReportPage;
+import org.microapp.ui.diary.coach.report.OneMemberReportPage;
 import org.microapp.ui.diary.goal.GoalFormPage;
 import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.diary.plans.detail.PlanDetailPage;
 import org.microapp.ui.diary.plans.form.PlanFormPage;
+import org.microapp.ui.diary.plans.report.PlanReportPage;
 import org.microapp.ui.membership.MembershipPage;
 import org.microapp.ui.security.DiarySession;
 
@@ -51,13 +56,20 @@ public class WicketApplication extends AuthenticatedWebApplication
 		mountPage("/home", HomePage.class);
 		mountPage("/membership", MembershipPage.class);
 		mountPage("/diary", DailyActivityPage.class);
-		mountPage("/diary/dailyActivity", DailyActivityPage.class);
+		mountPage("/diary/activity/daily", DailyActivityPage.class);
 		mountPage("/diary/activity", ActivityFormPage.class);
+		mountPage("/diary/activity/report", DailyRecordReportPage.class);
+		
 		mountPage("/diary/plans", PlansPage.class);
 		mountPage("/diary/plans/detail", PlanDetailPage.class);
 		mountPage("/diary/plans/form",PlanFormPage.class);
+		mountPage("/diary/plans/report",PlanReportPage.class);
 		mountPage("/diary/goal", GoalFormPage.class);
+
 		mountPage("/diary/coach", CoachPage.class);
+		mountPage("/diary/coach/memberReport", OneMemberReportPage.class);
+		mountPage("/diary/coach/completeReport", CompleteReportPage.class);
+		mountPage("/diary/coach/plans", MultiplePlansPage.class);
 	}
 
 	@Override

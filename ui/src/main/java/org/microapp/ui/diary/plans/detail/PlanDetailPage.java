@@ -19,7 +19,9 @@ import org.microapp.Diary.service.GoalManager;
 import org.microapp.Diary.service.PlanManager;
 import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericPage;
+import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.base.converters.SqlDateConverter;
+import org.microapp.ui.base.genericTable.ActivityValueColumn;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.GenericTable;
@@ -28,7 +30,7 @@ import org.microapp.ui.diary.goal.GoalFormPage;
 import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.diary.plans.form.PlanFormPage;
 
-public class PlanDetailPage extends GenericPage {
+public class PlanDetailPage extends GenericSecuredPage {
 
 	private long planId;
 	private boolean planIdLoaded;
@@ -53,23 +55,17 @@ public class PlanDetailPage extends GenericPage {
 	}
 	
 	@Override
-	public void authenticate() {
-		super.authenticate();
-		
-		//check if the user is logged and redirect to login page if isn't
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		if(!isSignedIn()) {
-			logger.debug("No user logged. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-		}
-	}
-	
-	@Override
 	public void loadParameters(PageParameters parameters) {
 		super.loadParameters(parameters);
 		loadPlanId(parameters);
 		if(planIdLoaded) {
+			//check if can access
 			plan = planManager.get(planId);
+			
+			if (!canAccess(getloggedUserId(), plan.getPersonId())) {
+				logger.warn("Member with id: "+getloggedUserId()+" can't access "+plan+". Redirecting back to plans page.");
+				setResponsePage(PlansPage.class);
+			}
 		}
 	}
 	
@@ -112,12 +108,16 @@ public class PlanDetailPage extends GenericPage {
 			List<Goal> values = goalManager.getUncompletedGoalsForPlan(planId);
 			logger.debug(values.size()+" goals loaded.");
 			
-			GenericTable goalTable = new GenericTable(GOAL_TABLE_ID, Goal.class, values, Arrays.asList("id","activityType","value","activityUnit"), null) {
+			GenericTable goalTable = new GenericTable(GOAL_TABLE_ID, Goal.class, values, Arrays.asList("id","activityType"), null) {
 				
 				@Override
 				protected List<ComponentColumn> getComponentColumns() {
 					List<ComponentColumn> columns = super.getComponentColumns();
 
+					//column to display value and unit
+					ActivityValueColumn valCol = new ActivityValueColumn("value","activityUnit","actVal");
+					columns.add(valCol);
+					
 					//column to display the progress
 					columns.add(new ProgressColumn("progress", "progress"));
 					

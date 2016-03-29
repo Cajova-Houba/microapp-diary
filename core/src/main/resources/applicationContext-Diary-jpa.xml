@@ -9,6 +9,7 @@
        default-lazy-init="true">
 
 	<import resource="classpath:applicationContext-Diary-resources.xml"/>
+	<import resource="classpath:applicationContext-membernet.xml"/>
 	
 	<!-- session factory -->
 	<bean id="sessionFactoryDiary" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
@@ -48,7 +49,7 @@
     <bean id="goalDao" class="org.microapp.Diary.dao.hibernate.GoalDaoHibernate">
     </bean>
     
-    <bean id="activityDao" class="org.microapp.Diary.generic.dao.hibernate.GenericDaoHibernate">
+    <bean id="dailyActivityDao" class="org.microapp.Diary.generic.dao.hibernate.GenericDaoHibernate">
     	<constructor-arg value="org.microapp.Diary.model.Activity" />
     </bean> 
     
@@ -66,10 +67,10 @@
     <bean id="goalManager" class="org.microapp.Diary.service.impl.GoalManagerImpl">
     </bean>
     
-    <bean id="activityManager" class="org.microapp.Diary.service.impl.ActivityManagerImpl">
+    <bean id="dailyActivityManager" class="org.microapp.Diary.service.impl.ActivityManagerImpl">
     </bean>
 
-	<bean id="reportManager" class="org.microapp.Diary.service.impl.ReportManagerImpl">
+	<bean id="diaryReportManager" class="org.microapp.Diary.service.impl.ReportManagerImpl">
 	</bean>
 	
 	<bean id="memberInfoManager" class="org.microapp.Diary.service.impl.MemberInfoManagerImpl">

@@ -1,5 +1,6 @@
 package org.microapp.Diary.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.microapp.Diary.generic.dao.GenericAccessDao;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.yoso.dev.membernet.membership.domain.Membership;
 
 public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, Long>
 		implements MemberInfoManager {
@@ -22,7 +25,6 @@ public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, 
 		this.miDao = miDao;
 	}
 
-	@Override
 	@Transactional (
     		value = "transactionManagerDiary",
     		propagation = Propagation.REQUIRES_NEW
@@ -37,7 +39,6 @@ public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, 
 		}
 	}
 
-	@Override
 	@Transactional (
     		value = "transactionManagerDiary",
     		propagation = Propagation.REQUIRES_NEW
@@ -51,5 +52,32 @@ public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, 
 			return null;
 		}
 	}
+
+	@Override
+	public MemberInfo getMemberInfo(Membership membership) {
+
+		long personId = membership.getId();
+
+		List<MemberInfo> mi = getAllForPerson(personId);
+		if (!mi.isEmpty()) {
+			return mi.get(0);
+		} 
+		
+		MemberInfo mInfo = new MemberInfo(membership);
+		return save(mInfo);
+	}
+
+	@Override
+	public List<MemberInfo> getMemberInfos(List<Membership> memberships) {
+		
+		List<MemberInfo> infos = new ArrayList<MemberInfo>(memberships.size());
+		for(Membership m : memberships) {
+			infos.add(getMemberInfo(m));
+		}
+		
+		return infos;
+	}
+	
+	
 
 }

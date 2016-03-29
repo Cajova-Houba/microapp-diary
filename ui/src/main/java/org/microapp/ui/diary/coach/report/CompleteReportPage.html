@@ -1,0 +1,51 @@
+<wicket:extend>
+	<div id="contentDiv">
+		<form wicket:id="reportForm">
+			<div style="overflow:hidden">
+				<div style="float:left; border-right: 3px solid #5dac00; width:48%; margin-right:10px;">
+					<h3><wicket:message key="membersSection.header" /></h3>
+					<div wicket:id="members">
+					</div>
+				</div>
+				<div style="float:left;">
+					<h3><wicket:message key="activitySection.header" /></h3>
+					<table>
+						<tr>
+							<td><wicket:message key="actFrom" /></td>
+							<td><span wicket:id="actFrom"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="actTo" /></td>
+							<td><span wicket:id="actTo"></span></td>
+						</tr>
+					</table>
+					
+					<hr width="50%" style="margin-left:0px;">
+					<h3><wicket:message key="planSection.header" /></h3>
+					<table>
+						<tr>
+							<td><wicket:message key="planFrom"/></td>
+							<td><span wicket:id="planFrom"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="planTo"/></td>
+							<td><span wicket:id="planTo"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="completed"/></td>
+							<td><input type="checkbox" wicket:id="completed"></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="uncompleted"/></td>
+							<td><input type="checkbox" wicket:id="uncompleted"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div>
+				<input type="submit" id="commonButton" wicket:message="value:reportBtn.caption" onclick="this.form.target='_blank'">
+				<button id="commonButton" onclick="this.form.target=''" wicket:id="cancelBtn"><wicket:message key="cancelBtn.caption" /></button>
+			</div>
+		</form>
+	</div>
+</wicket:extend>

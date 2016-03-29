@@ -1,0 +1,41 @@
+<wicket:extend>
+	<div id="contentDiv">
+		<form wicket:id="plansForm">
+			<div style="overflow:hidden">
+				<div style="float:left; border-right: 3px solid #5dac00; width:48%; margin-right:10px;">
+					<h3><wicket:message key="membersSection.header" /></h3>
+					<div wicket:id="members">
+					</div>
+				</div>
+				<div style="float:left;">
+					<h3><wicket:message key="planSection.header" /></h3>
+					<table>
+						<tr>
+							<td><wicket:message key="planName" /></td>
+							<td><input type="text" wicket:id="planName"></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="starts" /></td>
+							<td><span wicket:id="starts"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="ends" /></td>
+							<td><span wicket:id="ends"></span></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div>
+				<h3><wicket:message key="goalSection.header" /></h3>
+				<div wicket:id="goalsTable" id="table">
+				</div>
+			</div>
+			
+			<div>
+				<input type="submit" wicket:message="value:planBtn.caption" id="commonButton">
+				<button id="commonButton" wicket:id="cancelBtn"><wicket:message key="cancelBtn.caption" /></button>
+			</div>
+		</form>
+	</div>
+</wicket:extend>

@@ -33,8 +33,6 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			WEB-INF/applicationContext-properties.xml
-			
 			<!-- membernet-core -->
 			classpath:applicationContext-dao.xml
 			classpath:applicationContext-resources.xml

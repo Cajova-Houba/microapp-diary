@@ -1,33 +1,23 @@
 package org.microapp.ui.diary.goal;
 
-import java.util.Arrays;
-
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.Diary.model.Goal;
 import org.microapp.Diary.model.Plan;
-import org.microapp.Diary.model.enums.ActivityType;
 import org.microapp.Diary.service.GoalManager;
 import org.microapp.Diary.service.PlanManager;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericPage;
-import org.microapp.ui.base.activityForm.AbstractActivityForm;
-import org.microapp.ui.diary.dailyActivity.DailyActivityPage;
+import org.microapp.ui.base.GenericSecuredPage;
+import org.microapp.ui.base.form.AbstractActivityForm;
+import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.diary.plans.detail.PlanDetailPage;
 
 
-public class GoalFormPage extends GenericPage {
+public class GoalFormPage extends GenericSecuredPage {
 	
 	private final String GOAL_FORM_ID = "goalForm";
 	
@@ -39,7 +29,6 @@ public class GoalFormPage extends GenericPage {
 	private long planId;
 	private boolean planIdLoaded;
 	
-	private Goal goal;
 	
 	@SpringBean
 	private GoalManager goalManager;
@@ -53,23 +42,28 @@ public class GoalFormPage extends GenericPage {
 	}
 	
 	@Override
-	public void authenticate() {
-		super.authenticate();
-		
-		//check if the user is logged and redirect to login page if isn't
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		if(!isSignedIn()) {
-			logger.debug("No user logged. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-		}
-	}
-	
-	@Override
 	public void loadParameters(PageParameters parameters) {
 		super.loadParameters(parameters);
 		
 		loadGoalId(parameters);
 		loadPlanId(parameters);
+		
+		//check if member can access
+		if (goalIdLoaded) {
+			long personId = goalManager.get(goalId).getPlan().getPersonId();
+			if (!canAccess(getloggedUserId(), personId)) {
+				logger.warn("Member with id: "+getloggedUserId()+" can't access "+goalManager.get(goalId)+". Redirecting back to plans page.");
+				setResponsePage(PlansPage.class);
+			}
+		}
+		
+		if (planIdLoaded) {
+			long pId = planManager.get(planId).getPersonId();
+			if (!canAccess(getloggedUserId(), pId)) {
+				logger.warn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
+				setResponsePage(PlansPage.class);
+			}
+		}
 	}
 	
 	private void loadGoalId(PageParameters parameters) {
@@ -208,7 +202,7 @@ public class GoalFormPage extends GenericPage {
 				//nothing to delete
 				logger.debug("No goal to delete.");
 			} else {
-				logger.debug("Deleting goal with id="+goal.getId());
+				logger.debug("Deleting goal with id="+object.getId());
 				
 				goalManager.remove(object.getId());
 				

@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -30,7 +31,8 @@ import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.CustomButton;
 import org.microapp.ui.base.genericTable.GenericTable;
-import org.microapp.ui.diary.displayer.dailyRecord.DailyRecordDisplayer;
+import org.microapp.ui.diary.activity.displayer.DailyRecordDisplayer;
+import org.microapp.ui.diary.plans.report.PlanReportPage;
 
 public class PlanDisplayer extends Panel {
 
@@ -45,6 +47,7 @@ public class PlanDisplayer extends Panel {
 	private final String PLAN_TABLE_ID = "planTable";
 	private final String ADD_PLAN_BUTTON_ID = "addPlanButton";
 	private final String CSS_FILE_NAME = "pdStyle.css";
+	private final String REPORT_BUTTON_ID = "reportButton";
 	
 	private long loggedId;
 	private long personId;
@@ -83,6 +86,7 @@ public class PlanDisplayer extends Panel {
 		addPlanTable();
 		addPlanButton();
 		addSearchForm();
+		addReportButton();
 	}
 	
 	private void addPlanTable() {
@@ -96,6 +100,18 @@ public class PlanDisplayer extends Panel {
 	
 	private void addPlanButton() {
 		ExternalLink link = new ExternalLink(ADD_PLAN_BUTTON_ID, "/diary/plans/form?personId="+personId);
+		add(link);
+	}
+	
+	private void addReportButton() {
+		Link link = new Link(REPORT_BUTTON_ID) {
+
+			@Override
+			public void onClick() {
+				setResponsePage(PlanReportPage.class);
+			}
+		};
+		
 		add(link);
 	}
 	

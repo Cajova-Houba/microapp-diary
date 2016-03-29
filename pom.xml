@@ -23,6 +23,14 @@
 		<log4j.version>2.4</log4j.version>
 	</properties>
 	
+	<repositories>
+        <repository>
+            <id>yosorep</id>
+            <name>Internal Releases</name>
+            <url>https://dev.yoso.fi/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+	
 	<dependencies>
 		<!-- LOGGING DEPENDENCIES - LOG4J -->
 		<dependency>

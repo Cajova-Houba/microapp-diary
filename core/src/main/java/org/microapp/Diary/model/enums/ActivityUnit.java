@@ -10,7 +10,7 @@ public enum ActivityUnit {
 	/**
 	 * No unit.
 	 */
-	NULL(1,"no unit"),
+	NULL(1,""),
 	
 	/**
 	 * Millimeters.

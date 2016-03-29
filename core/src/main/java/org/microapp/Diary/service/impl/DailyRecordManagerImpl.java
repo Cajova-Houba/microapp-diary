@@ -26,7 +26,6 @@ public class DailyRecordManagerImpl extends GenericAccessManagerImpl<DailyRecord
 		return dailyRecordDao.getDailyRecordsFrom(date, memberID);
 	}
 
-	@Override
 	public List<DailyRecord> getDailyRecords(Long memberID, Date after, Date before) {
 		return dailyRecordDao.getDailyRecords(memberID, after, before);
 	}

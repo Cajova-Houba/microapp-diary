@@ -1,4 +1,4 @@
-package org.microapp.ui.diary.displayer.dailyRecord;
+package org.microapp.ui.diary.activity.displayer;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -32,11 +32,13 @@ import org.microapp.Diary.model.Activity;
 import org.microapp.Diary.model.DailyRecord;
 import org.microapp.Diary.service.ActivityManager;
 import org.microapp.Diary.service.DailyRecordManager;
+import org.microapp.ui.base.genericTable.ActivityValueColumn;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.CustomButton;
 import org.microapp.ui.base.genericTable.GenericTable;
-import org.microapp.ui.diary.activity.ActivityFormPage;
+import org.microapp.ui.diary.activity.form.ActivityFormPage;
+import org.microapp.ui.diary.activity.report.DailyRecordReportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -49,6 +51,9 @@ public class DailyRecordDisplayer extends Panel {
 
 	private static final String CSS_FILE_NAME = "drdStyle.css";
 	
+	private final String REPORT_BTN_ID = "reportBtn";
+	private final String NO_ACTIVITY_ID = "noAct";
+	
 	private static final Logger logger = LogManager.getLogger(DailyRecordDisplayer.class);
 	
 	@SpringBean
@@ -57,18 +62,14 @@ public class DailyRecordDisplayer extends Panel {
 	private final long loggedId;
 	private final long personId;
 
-	//for test purposes
-	private TextField tf;
-	private Label testLabel;
-	private DateTextField dtf;
-
 	private DateField dateField;
 	private GenericTable actTable;
+	private Label noActLabel;
 	
 	//selected date
 	private Date selectedDate;
 	
-	private List<String> fieldNames = Arrays.asList(new String[] {"id","name","activityType","value","activityUnit"});
+	private List<String> fieldNames = Arrays.asList(new String[] {"id","name","activityType"});
 	
 	/**
 	 * Model for GenericTable. The list of objects to be displyed should be there.
@@ -102,6 +103,7 @@ public class DailyRecordDisplayer extends Panel {
 		addDateForm("dateForm",selectedDate);
 		addActivityTable("activityTable", selectedDate);
 		addNewActButton("btnNewAct");
+		addReportButton();
 	}
 	
 	private void addNewActButton(String buttonId) {
@@ -115,6 +117,16 @@ public class DailyRecordDisplayer extends Panel {
 				params.add("memberId",personId);
 				
 				setResponsePage(ActivityFormPage.class,params);
+			}
+		};
+		add(link);
+	}
+	
+	private void addReportButton() {
+		Link link = new Link(REPORT_BTN_ID) {
+			@Override
+			public void onClick() {
+				setResponsePage(DailyRecordReportPage.class);
 			}
 		};
 		add(link);
@@ -143,6 +155,13 @@ public class DailyRecordDisplayer extends Panel {
 				logger.debug(activities.size()+" activities loaded.");
 				actTable.newData(new ListModel(activities));
 								
+				if(activities.isEmpty()) {
+					noActLabel.setDefaultModel(Model.of("No activities"));
+				} else {
+					noActLabel.setDefaultModel(Model.of(""));
+				}
+				
+				target.add(noActLabel);
 				target.add(actTable);
 			}
 		};
@@ -157,9 +176,19 @@ public class DailyRecordDisplayer extends Panel {
 		//get activities to display
 		DailyRecord dailyRecord = dailyRecordManager.getDailyRecordFrom(initialDate, personId);
 		
+		
+		
 		List<Activity> activities = dailyRecord.getActivities();
+		//add noAct label
+		if(activities.isEmpty()) {
+			noActLabel = new Label(NO_ACTIVITY_ID, "No activities");
+		} else {
+			noActLabel = new Label(NO_ACTIVITY_ID);
+		}
+		noActLabel.setOutputMarkupId(true);
+		add(noActLabel);
+		
 		//new table using GenericTable
-//		actTable = new GenericTable(activityTableId, Activity.class, activities, fieldNames, null);
 		actTable = new ActivityTable(activityTableId, Activity.class, values, fieldNames, null);
 		actTable.newData(new ListModel(activities));
 		actTable.setOutputMarkupId(true);
@@ -186,6 +215,9 @@ class ActivityTable extends GenericTable {
 	@Override
 	protected List<ComponentColumn> getComponentColumns() {
 		List<ComponentColumn> componentColumns = super.getComponentColumns();
+		
+		ActivityValueColumn valCol = new ActivityValueColumn("value","activityUnit","actVal");
+		componentColumns.add(valCol);
 		
 		ButtonColumn editColumn = new ButtonColumn("id", "editColumn");
 		componentColumns.add(editColumn);

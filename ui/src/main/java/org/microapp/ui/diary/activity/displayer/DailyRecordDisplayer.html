@@ -5,9 +5,12 @@
 	<button wicket:id="btnShow" id="commonButton">Show!</button>
 	</form>
 	
+	<wicket:enclosure>
+		<span style="color:red;" wicket:id="noAct"></span>
+	</wicket:enclosure>
 	<div id="table" wicket:id="activityTable">
 	</div>
 	
 	<button id="commonButton" wicket:id="btnNewAct"><wicket:message key="drd.btnNewActCaption" /></button>
-	<button id="commonButton"><wicket:message key="reportButton.caption" /></button>
+	<button id="commonButton" wicket:id="reportBtn"><wicket:message key="reportButton.caption" /></button>
 </wicket:panel>

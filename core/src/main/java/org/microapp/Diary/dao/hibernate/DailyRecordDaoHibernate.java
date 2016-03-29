@@ -25,7 +25,6 @@ public class DailyRecordDaoHibernate extends GenericAccessDaoHibernate<DailyReco
 		return find(query, parameters);
 	}
 	
-	@Override
 	public List<DailyRecord> getDailyRecords(Long memberID, Date after, Date before) {
 		String query = "SELECT dr FROM DailyRecord dr WHERE "
 				+ "dr.date>=:after "

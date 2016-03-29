@@ -1,4 +1,4 @@
-package org.microapp.ui.diary.activity;
+package org.microapp.ui.diary.activity.form;
 
 import java.sql.Date;
 import java.util.Arrays;
@@ -24,8 +24,9 @@ import org.microapp.Diary.service.DailyRecordManager;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericPage;
-import org.microapp.ui.base.activityForm.AbstractActivityForm;
-import org.microapp.ui.diary.dailyActivity.DailyActivityPage;
+import org.microapp.ui.base.GenericSecuredPage;
+import org.microapp.ui.base.form.AbstractActivityForm;
+import org.microapp.ui.diary.activity.DailyActivityPage;
 
 /**
  * Form for creating, editing or deleting activity. 
@@ -34,16 +35,13 @@ import org.microapp.ui.diary.dailyActivity.DailyActivityPage;
  * @author Zdenda
  *
  */
-public class ActivityFormPage extends GenericPage {
+public class ActivityFormPage extends GenericSecuredPage {
 	
 	private long activityId;
 	private boolean activityIdLoaded;
 	
 	private Date date;
 	private boolean dateLoaded;
-	
-	private long memberId;
-	private boolean memberIdLoaded;
 	
 	@SpringBean
 	private DailyRecordManager dailyRecordManager;
@@ -57,24 +55,10 @@ public class ActivityFormPage extends GenericPage {
 	}
 	
 	@Override
-	public void authenticate() {
-		super.authenticate();
-		
-		//check if the user is logged and redirect to login page if isn't
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		if(!isSignedIn()) {
-			logger.debug("No user logged. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-		}
-	}
-	
-	
-	@Override
 	public void loadParameters(PageParameters parameters) {
 		super.loadParameters(parameters);
 		
 		loadActivityId(parameters);
-		loadMemberId(parameters);
 		loadDate(parameters);
 	}
 	
@@ -84,15 +68,6 @@ public class ActivityFormPage extends GenericPage {
 		if (tmp != null) {
 			date = tmp;
 			dateLoaded = true;
-		}
-	}
-	
-	private void loadMemberId(PageParameters parameters) {
-		Long tmp = loadLongParameter(parameters, "memberId", false);
-		memberIdLoaded = false;
-		if (tmp != null) {
-			memberId = tmp.longValue();
-			memberIdLoaded = true;
 		}
 	}
 	
@@ -127,9 +102,9 @@ public class ActivityFormPage extends GenericPage {
 		if (activityIdLoaded) {
 			//edit activity
 			add(new ActivityForm(formId, formId, activityManager.get(activityId)));
-		} else if (dateLoaded && memberIdLoaded) {
+		} else if (dateLoaded && personIdLoaded) {
 			//add new activity
-			add(new ActivityForm(formId, formId, dailyRecordManager.getDailyRecordFrom(date, memberId)));
+			add(new ActivityForm(formId, formId, dailyRecordManager.getDailyRecordFrom(date, personId)));
 		} else {
 			//error back to homepage
 			logger.error("Error: Neither activityId or date and memberId loaded, redirecting home.");
@@ -180,7 +155,7 @@ public class ActivityFormPage extends GenericPage {
 			params.add("selected", "drd");
 			params.add("date", parent.getDate());
 			
-			params.add("personId", memberId);
+			params.add("personId", personId);
 			
 			setResponsePage(responsePage,params);
 		}

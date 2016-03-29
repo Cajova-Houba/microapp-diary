@@ -18,6 +18,9 @@ import java.util.List;
 
 
 
+
+
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -36,9 +39,9 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.membernet.MembernetManager;
 import org.microapp.ui.HomePage;
+import org.microapp.ui.diary.activity.DailyActivityPage;
+import org.microapp.ui.diary.activity.displayer.DailyRecordDisplayer;
 import org.microapp.ui.diary.coach.CoachPage;
-import org.microapp.ui.diary.dailyActivity.DailyActivityPage;
-import org.microapp.ui.diary.displayer.dailyRecord.DailyRecordDisplayer;
 import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.membership.MembershipPage;
 import org.microapp.ui.security.DiarySession;
@@ -140,7 +143,7 @@ public class GenericPage extends WebPage {
 	/**
 	 * Check if there is a usser logged in current session and checks if he's a couch.
 	 */
-	public void authenticate() {
+	protected void authenticate() {
 		DiarySession session = getAuthSession();
 		if (session.isSignedIn()) {
 			loggedUserId = session.getLoggedMemberId();
@@ -156,7 +159,7 @@ public class GenericPage extends WebPage {
 	 * Basic initialization is being done here. Override this method to set the title and header or back link.
 	 * You can also do your authentication here.
 	 */
-	public void inic() {
+	protected void inic() {
 		this.inic(null);
 	}
 	
@@ -165,17 +168,17 @@ public class GenericPage extends WebPage {
 	 * You can also do your authentication here.
 	 * @param parameters Page parameters to be used.
 	 */
-	public void inic(PageParameters parameters) {
+	protected void inic(PageParameters parameters) {
 		setBackLink(DEF_BACK_LINK);
 		setTitle(new ResourceModel("title", DEF_TITLE));
 		setHeader(new ResourceModel("header", DEF_HEADER));
 	}
 	
-	public void addComponents() {
+	protected void addComponents() {
 		this.addComponents(null);
 	}
 	
-	public void addComponents(PageParameters parameters) {
+	protected void addComponents(PageParameters parameters) {
 		add(new Label(TITLE_ID,getTitleModel()));
 		add(new Label(HEADER_ID,getHeaderModel()));
 		addMainMenu(MAIN_MENU_ID);
@@ -292,7 +295,7 @@ public class GenericPage extends WebPage {
 	 * Override this method to load your parameters.
 	 * @param parameters
 	 */
-	public void loadParameters(PageParameters parameters) {
+	protected void loadParameters(PageParameters parameters) {
 		
 	}
 	
@@ -311,6 +314,7 @@ public class GenericPage extends WebPage {
 		if(!parameters.get(paramName).isNull()) {
 			try {
 				paramValue = Long.parseLong(parameters.get(paramName).toString());
+				logger.debug("Parameter '"+paramName+"' loaded with value: "+paramValue);
 			} catch (Exception e) {
 				String msg = "Error when parsing parameter '"+paramName+"'. "+e.toString();
 				addError(msg);
@@ -321,6 +325,8 @@ public class GenericPage extends WebPage {
 			String msg = "Parameter '"+paramName+"' not found.";
 			addError(msg);
 			logger.warn(msg);
+		} else {
+			logger.debug("Parameter '"+paramName+"' is null.");
 		}
 		
 		

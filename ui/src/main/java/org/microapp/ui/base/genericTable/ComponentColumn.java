@@ -44,8 +44,8 @@ public abstract class ComponentColumn implements IColumn<Object, Object> {
 	 * @param rowModel
 	 * @return
 	 */
-	protected IModel<?> getDataModel(IModel<Object> rowModel) {
-		PropertyModel<?> propertyModel = new PropertyModel<>(rowModel, getPropertyExpression());
+	protected IModel<Object> getDataModel(IModel<Object> rowModel) {
+		PropertyModel<Object> propertyModel = new PropertyModel<>(rowModel, getPropertyExpression());
 		
 		return propertyModel;
 	}

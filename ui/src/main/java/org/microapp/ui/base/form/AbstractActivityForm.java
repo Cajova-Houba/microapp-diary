@@ -1,4 +1,4 @@
-package org.microapp.ui.base.activityForm;
+package org.microapp.ui.base.form;
 
 import java.util.Arrays;
 

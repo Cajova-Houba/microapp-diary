@@ -21,10 +21,11 @@ import org.microapp.Diary.service.PlanManager;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericPage;
+import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.diary.plans.detail.PlanDetailPage;
 
-public class PlanFormPage extends GenericPage {
+public class PlanFormPage extends GenericSecuredPage {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,12 +37,6 @@ public class PlanFormPage extends GenericPage {
 	private long planId;
 	private boolean planIdLoaded;
 	
-	/**
-	 * New plan will be created for this person. If personId parameters is not loaded, use logged person id instead.
-	 */
-	private long personId;
-	private boolean personIdLoaded;
-	
 	@SpringBean
 	private PlanManager planManager;
 	
@@ -50,23 +45,19 @@ public class PlanFormPage extends GenericPage {
 	}
 	
 	@Override
-	public void authenticate() {
-		super.authenticate();
-		
-		//check if the user is logged and redirect to login page if isn't
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		if(!isSignedIn()) {
-			logger.debug("No user logged. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-		}
-	}
-	
-	@Override
 	public void loadParameters(PageParameters parameters) {
 		super.loadParameters(parameters);
 		
 		loadPlanId(parameters);
-		loadPersonId(parameters);
+		
+		//check if can access
+		if (planIdLoaded) {
+			long pId = planManager.get(planId).getPersonId();
+			if (!canAccess(getloggedUserId(), pId)) {
+				logger.warn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
+				setResponsePage(PlansPage.class);
+			}
+		}
 	}
 	
 	private void loadPlanId(PageParameters parameters) {
@@ -79,23 +70,6 @@ public class PlanFormPage extends GenericPage {
 			if (planIdLoaded) {
 				logger.debug("PlanId = "+planId+" loaded.");
 			}
-		}
-	}
-	
-	private void loadPersonId(PageParameters parameters) {
-		personIdLoaded = false;
-		Long tmp = loadLongParameter(parameters, "personId", false);
-		if (tmp != null) {
-			personId = tmp.longValue();
-			personIdLoaded = true;
-			
-			logger.debug("PersonId = "+personId+" loaded.");
-		}
-		
-		if(!personIdLoaded) {
-			logger.debug("No personId loaded, use loggedId instead.");
-			personId = getloggedUserId();
-			personIdLoaded = true;
 		}
 	}
 	
@@ -220,7 +194,7 @@ public class PlanFormPage extends GenericPage {
 		@Override
 		protected void onSubmit() {
 			
-			logger.debug("Submiting form.");
+			logger.debug("Submitting form.");
 			
 			validate();
 			

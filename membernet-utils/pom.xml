@@ -95,7 +95,7 @@
   		<!-- MN core -->
 	    <dependency>
 			<groupId>com.yoso.membernet</groupId>
-	        <artifactId>membernet-micro-core</artifactId>
+	        <artifactId>membernet-core</artifactId>
 	        <version>0.7.15-SNAPSHOT</version>
 		</dependency>
 		
