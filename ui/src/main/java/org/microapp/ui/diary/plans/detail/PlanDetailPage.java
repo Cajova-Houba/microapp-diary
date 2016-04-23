@@ -8,7 +8,10 @@ import java.util.List;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -38,6 +41,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 	private final String PLAN_NAME_ID = "planName";
 	private final String PLAN_FROM_ID = "planFrom";
 	private final String PLAN_TO_ID = "planTo";
+	private final String PLAN_COMPLETED_ID ="isCompleted";
 	private final String GOAL_TABLE_ID = "goalTable";
 	private final String EDIT_PLAN_ID = "editPlan";
 	private final String MARK_AS_COMPL_ID = "markAsCompl";
@@ -218,10 +222,12 @@ public class PlanDetailPage extends GenericSecuredPage {
 			add(new Label(PLAN_NAME_ID,new PropertyModel<String>(plan, "name")));
 			add(new Label(PLAN_FROM_ID,new PropertyModel<Date>(plan, "startDate")));
 			add(new Label(PLAN_TO_ID,new PropertyModel<Date>(plan, "endDate")));
+			add(new Label(PLAN_COMPLETED_ID, new StringResourceModel("completed.${completed}", new Model(plan), "completed")));
 		} else {
 			add(new Label(PLAN_NAME_ID,"Plan name"));
 			add(new Label(PLAN_FROM_ID,"date"));
 			add(new Label(PLAN_TO_ID,"date"));
+			add(new Label(PLAN_COMPLETED_ID, new ResourceModel("completed.false")));
 		}
 		
 	}
