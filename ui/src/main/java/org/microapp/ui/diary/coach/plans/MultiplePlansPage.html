@@ -33,6 +33,16 @@
 			</div>
 			
 			<div>
+				<form wicket:id="goalForm">
+					<input type="text" wicket:id="goalName"> <!-- name -->
+					<select wicket:id="goalActType"></select>
+					<input type="number" wicket:id="goalValue"> <!-- value -->
+					<select wicket:id="goalActUnit"></select><br>
+					<button id="commonButton" wicket:id="addGoalBtn"><wicket:message key="addGoalBtn.caption" /></button>
+				</form>
+			</div><br><br>
+			
+			<div>
 				<input type="submit" wicket:message="value:planBtn.caption" id="commonButton">
 				<button id="commonButton" wicket:id="cancelBtn"><wicket:message key="cancelBtn.caption" /></button>
 			</div>

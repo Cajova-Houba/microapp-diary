@@ -1,11 +1,14 @@
 package org.microapp.Diary.service.impl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.microapp.Diary.dao.PlanDao;
 import org.microapp.Diary.generic.service.impl.GenericAccessManagerImpl;
+import org.microapp.Diary.model.Goal;
 import org.microapp.Diary.model.Plan;
+import org.microapp.Diary.service.GoalManager;
 import org.microapp.Diary.service.PlanManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,6 +16,9 @@ public class PlanManagerImpl extends GenericAccessManagerImpl<Plan, Long> implem
 		PlanManager {
 
 	private PlanDao planDao;
+	
+	@Autowired
+	private GoalManager goalManager;
 	
 	@Autowired
 	public PlanManagerImpl(PlanDao planDao) {
@@ -62,5 +68,22 @@ public class PlanManagerImpl extends GenericAccessManagerImpl<Plan, Long> implem
 		return save(plan);
 	}
 	
-
+	@Override
+	public Plan save(Plan object) {
+		
+		//save the plan
+		Plan savedPlan = super.save(object);
+		
+		List<Goal> goals = object.getGoals(); 
+		List<Goal> savedGoals = new ArrayList<Goal>(goals.size());
+		
+		//save goals 
+		for(Goal g : goals) {
+			g.setPlan(savedPlan);
+			savedGoals.add(goalManager.save(g));
+		}
+		
+		savedPlan.setGoals(savedGoals);
+		return savedPlan;
+	}
 }

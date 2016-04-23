@@ -2,6 +2,7 @@ package org.microapp.ui.base;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.membernet.MembernetManager;
 import org.microapp.membernet.vo.MembershipVO;
 import org.microapp.ui.HomePage;
+import org.microapp.ui.base.menu.GenericMenu;
 import org.microapp.ui.diary.activity.DailyActivityPage;
 import org.microapp.ui.diary.coach.CoachPage;
 import org.microapp.ui.diary.plans.PlansPage;
@@ -167,100 +169,22 @@ public class GenericPage extends WebPage {
 	}
 	
 	private void addMainMenu(String mainMenuId) {
-		RepeatingView menuItems = new RepeatingView(mainMenuId);
 		
-		//homepage link
-		Link homeLink = new Link(menuItems.newChildId()) {
-
-			@Override
-			public void onClick() {
-				// TODO Auto-generated method stub
-				setResponsePage(getBackLink());
-			}
-		};
-		homeLink.setBody(Model.of("Home"));
-		menuItems.add(homeLink);
-		
-		//add links from the getMenuLinks method
-		for(AbstractLink l : getMenuLinks()) {
-			//enables changing the id
-			l.setOutputMarkupId(true);
-			l.setMarkupId(menuItems.newChildId());
-			menuItems.add(l);
-		}
-		
-		//add the component
-		add(menuItems);
-	}
-	
-	
-	/**
-	 * This method will return a collection of links which will be used in main menu.
-	 * The ids of links will be set in another method.
-	 * 
-	 * @return
-	 */
-	private List<AbstractLink> getMenuLinks() {
-		
-		List<AbstractLink> links = new ArrayList<AbstractLink>(0);
-		
-		//membership table link
-		Link memLink = new Link("memLink") {
-
-			@Override
-			public void onClick() {
-				setResponsePage(MembershipPage.class);
-			}
-		};
-		memLink.setBody(Model.of("Memberships"));
-		
-		
-		//add links to list
-		links.add(memLink);
-		
-		//links for logged user
+		List<String> linkNames = new ArrayList<String>();
+		linkNames.add("home");
+		linkNames.add("login");
 		if(isSignedIn()) {
-			Link drLink = new Link("drLink") {
-
-				@Override
-				public void onClick() {
-					setResponsePage(DailyActivityPage.class);
-				}
-				
-			};
-			drLink.setBody(Model.of("Daily activity"));
-			
-			Link planLink = new Link("planLink") {
-
-				@Override
-				public void onClick() {
-					setResponsePage(PlansPage.class);
-				}
-				
-			};
-			planLink.setBody(Model.of("Plans"));
-			
-			links.add(drLink);
-			links.add(planLink);
-			
-			//if the logged user is also a couch, link to couch section will be displayed
-			if (isCoach()) {
-				Link couchLink = new Link("coachLink") {
-
-					@Override
-					public void onClick() {
-						setResponsePage(CoachPage.class);
-					}
-				};
-				couchLink.setBody(Model.of("Coach"));
-				links.add(couchLink);
-			}
+			linkNames.add("dailyRecords");
+			linkNames.add("plans");
+		}
+		if(isCoach()) {
+			linkNames.add("coach");
 		}
 		
-		
-		//and return the list
-		return links;
+		GenericMenu mainMenu = new GenericMenu(MAIN_MENU_ID, linkNames);
+		add(mainMenu);
 	}
+	
 	
 	/**
 	 * Override this method to load your parameters.

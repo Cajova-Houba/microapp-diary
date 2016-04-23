@@ -48,8 +48,9 @@ public class Goal extends BaseActivityObject {
 
 	@Override
 	public String toString() {
-		return Goal.class.getSimpleName()+String.format(" [id=%d, type=%s, value=%f, unit=%s, progress=%f, planId=%d]",
+		return Goal.class.getSimpleName()+String.format(" [id=%d, name=%s, type=%s, value=%f, unit=%s, progress=%f, planId=%d]",
 															getId(),
+															getName(),
 															getActivityType() == null ? null : getActivityType().name(),
 															getValue(),
 															getActivityUnit() == null ? null : getActivityUnit().name(),
@@ -76,6 +77,21 @@ public class Goal extends BaseActivityObject {
 	@Override
 	public int hashCode() {
 		return 0;
+	}
+	
+	public Goal clone() {
+		Goal g = new Goal();
+		
+		g.setId(getId());
+		g.setName(getName());
+		g.setValue(getValue());
+		g.setActivityType(getActivityType());
+		g.setActivityUnit(getActivityUnit());
+		g.setPlan(getPlan());
+		g.setProgress(getProgress());
+		g.setCompleted(isCompleted());
+		
+		return g;
 	}
 
 }

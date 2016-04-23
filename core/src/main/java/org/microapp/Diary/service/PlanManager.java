@@ -66,6 +66,4 @@ public interface PlanManager extends GenericAccessManager<Plan, Long>{
 	 */
 	public Plan completePlan(Plan plan);
 	
-	
-	
 }
