@@ -244,7 +244,7 @@ public class GenericPage extends WebPage {
 			links.add(planLink);
 			
 			//if the logged user is also a couch, link to couch section will be displayed
-			if (isCouch()) {
+			if (isCoach()) {
 				Link couchLink = new Link("coachLink") {
 
 					@Override
@@ -469,7 +469,7 @@ public class GenericPage extends WebPage {
 		return logged == null ? null : logged.getId();
 	}
 
-	public boolean isCouch() {
+	public boolean isCoach() {
 		return logged == null ? false : logged.isIsSocietyAdmin();
 	}
 	

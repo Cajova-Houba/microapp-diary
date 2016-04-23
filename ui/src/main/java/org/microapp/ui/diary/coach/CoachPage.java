@@ -5,21 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.microapp.membernet.vo.MembershipVO;
 import org.microapp.membernet.vo.SocietyVO;
-import org.microapp.ui.HomePage;
-import org.microapp.ui.WicketApplication;
-import org.microapp.ui.base.GenericPage;
+import org.microapp.ui.base.GenericAdminPage;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.GenericTable;
 import org.microapp.ui.diary.coach.plans.MultiplePlansPage;
 import org.microapp.ui.diary.coach.report.CompleteReportPage;
 
-public class CoachPage extends GenericPage{
+public class CoachPage extends GenericAdminPage{
 	private static final long serialVersionUID = 1L;
 	private final String HEADER_ID = "socName";
 	private final String TABLE_ID = "membersTable";
@@ -30,35 +27,12 @@ public class CoachPage extends GenericPage{
 	
 	
 	@Override
-	public void authenticate() {
+	protected void authenticate() {
 		super.authenticate();
 		
-		//check if the logged member is coach and get the society in which he is
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		if(!isSignedIn()) {
-			logger.debug("No user logged. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-		} else {
-			long loggedId = getloggedUserId();
-			
-			//check if exists
-			if(!membernetManager.exists(loggedId)){
-				logger.debug("User doesn't exist. Redirecting to membership page.");
-				app.restartResponseAtSignInPage();
-				
-				//check if is admin
-			} else if (membernetManager.getMembership(loggedId).isIsSocietyAdmin()) {
-				
-				//load society
-				this.society = membernetManager.getMembership(loggedId).getSociety();
-				if (society == null) {
-					logger.debug("No society");
-				}
-			} else {
-				logger.debug("User is not admin of society. Redirecting home");
-				setResponsePage(HomePage.class);
-			}
-		}
+		//admin status is already verified in GenericAdminPage
+		society = logged.getSociety();
+		logger.debug("User is admin of society with id: "+society.getId());
 	}
 	
 	@Override

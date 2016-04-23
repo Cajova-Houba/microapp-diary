@@ -20,10 +20,11 @@ import org.microapp.Diary.service.ReportManager;
 import org.microapp.membernet.vo.SocietyVO;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.WicketApplication;
+import org.microapp.ui.base.GenericAdminPage;
 import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.diary.coach.CoachPage;
 
-public class OneMemberReportPage extends GenericSecuredPage {
+public class OneMemberReportPage extends GenericAdminPage {
 	private static final long serialVersionUID = 1L;
 
 	private final String REPORT_FORM_ID = "reportForm";
@@ -33,35 +34,6 @@ public class OneMemberReportPage extends GenericSecuredPage {
 	
 	public OneMemberReportPage(PageParameters parameters) {
 		super(parameters);
-	}
-	
-	@Override
-	protected void authenticate() {
-		super.authenticate();
-		
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		long loggedId = getloggedUserId();
-		
-		//check if exists
-		if(!membernetManager.exists(loggedId)){
-			logger.debug("User doesn't exist. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-			
-			//check if is admin
-		} else if (membernetManager.getMembership(loggedId).isIsSocietyAdmin()) {
-			
-			//load society
-			SocietyVO society = membernetManager.getMembership(loggedId).getSociety();
-			if (society == null) {
-				logger.debug("No society");
-			} else {
-				long societyId = society.getId();
-				logger.debug("User is admin of society with id: "+societyId);
-			}
-		} else {
-			logger.debug("User is not admin of society. Redirecting home");
-			setResponsePage(HomePage.class);
-		}
 	}
 	
 	@Override

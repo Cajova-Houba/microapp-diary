@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -16,14 +15,12 @@ import org.microapp.Diary.model.Goal;
 import org.microapp.Diary.model.MemberInfo;
 import org.microapp.Diary.service.MemberInfoManager;
 import org.microapp.membernet.vo.SocietyVO;
-import org.microapp.ui.HomePage;
-import org.microapp.ui.WicketApplication;
-import org.microapp.ui.base.GenericSecuredPage;
+import org.microapp.ui.base.GenericAdminPage;
 import org.microapp.ui.base.form.MemberCheckBoxList;
 import org.microapp.ui.base.genericTable.GenericTable;
 import org.microapp.ui.diary.coach.CoachPage;
 
-public class MultiplePlansPage extends GenericSecuredPage {
+public class MultiplePlansPage extends GenericAdminPage {
 	private static final long serialVersionUID = 1L;
 
 	private long societyId;
@@ -37,29 +34,10 @@ public class MultiplePlansPage extends GenericSecuredPage {
 	protected void authenticate() {
 		super.authenticate();
 		
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
-		long loggedId = getloggedUserId();
-		
-		//check if exists
-		if(!membernetManager.exists(loggedId)){
-			logger.debug("User doesn't exist. Redirecting to membership page.");
-			app.restartResponseAtSignInPage();
-			
-			//check if is admin
-		} else if (membernetManager.getMembership(loggedId).isIsSocietyAdmin()) {
-			
-			//load society
-			SocietyVO society = membernetManager.getMembership(loggedId).getSociety();
-			if (society == null) {
-				logger.debug("No society");
-			} else {
-				this.societyId = society.getId();
-				logger.debug("User is admin of society with id: "+societyId);
-			}
-		} else {
-			logger.debug("User is not admin of society. Redirecting home");
-			setResponsePage(HomePage.class);
-		}
+		//admin status is already verified in GenericAdminPage
+		SocietyVO society = logged.getSociety();
+		this.societyId = society.getId();
+		logger.debug("User is admin of society with id: "+societyId);
 	}
 	
 	@Override
