@@ -2,6 +2,7 @@ package org.microapp.ui.base;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.microapp.membernet.vo.MembershipVO;
 import org.microapp.ui.WicketApplication;
 
 /**
@@ -18,6 +19,7 @@ public class GenericSecuredPage extends GenericPage {
 	 */
 	protected long personId;
 	protected boolean personIdLoaded;
+	protected MembershipVO person;
 	
 	public GenericSecuredPage(PageParameters parameters) {
 		super(parameters);
@@ -63,7 +65,8 @@ public class GenericSecuredPage extends GenericPage {
 		if (tmp != null) {
 			personId = tmp.longValue();
 			boolean canAccess = canAccess(getloggedUserId(), personId);
-			boolean exists = membernetManager.exists(personId);
+			person = membernetManager.getMembership(personId);
+			boolean exists = person != null;
 			
 			if (!exists) {
 				logger.warn("Member with id: "+personId+" doesn't exist.");
@@ -77,6 +80,7 @@ public class GenericSecuredPage extends GenericPage {
 		if(!personIdLoaded) {
 			logger.debug("No personId loaded, use loggedId instead.");
 			personId = getloggedUserId();
+			person = logged;
 			personIdLoaded = true;
 		}
 	}
@@ -91,4 +95,11 @@ public class GenericSecuredPage extends GenericPage {
 		return membernetManager.canAccess(requesterId, targetId);
 	}
 	
+	protected Long getPersonId() {
+		return person == null ? null : person.getId();
+	}
+	
+	protected String getPersonName() {
+		return person == null ? "" : person.getName();
+	}
 }

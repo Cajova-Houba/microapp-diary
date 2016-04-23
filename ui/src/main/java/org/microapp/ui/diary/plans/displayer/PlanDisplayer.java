@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.ComponentTag;
@@ -20,7 +20,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -31,18 +30,12 @@ import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.CustomButton;
 import org.microapp.ui.base.genericTable.GenericTable;
-import org.microapp.ui.diary.activity.displayer.DailyRecordDisplayer;
 import org.microapp.ui.diary.plans.report.PlanReportPage;
 
 public class PlanDisplayer extends Panel {
-
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = LogManager.getLogger(DailyRecordDisplayer.class);
+	private static final Logger logger = LogManager.getLogger(PlanDisplayer.class);
 
 	private final String PLAN_TABLE_ID = "planTable";
 	private final String ADD_PLAN_BUTTON_ID = "addPlanButton";
@@ -181,7 +174,7 @@ public class PlanDisplayer extends Panel {
 		private long personId;
 		
 		public PlanTable(List<? extends Serializable> values, long loggedId, long personId) {
-			super("planTable", Plan.class, values, Arrays.asList("id", "name", "startDate", "endDate"), null);
+			super("planTable", Plan.class, values, fieldNames, null);
 			
 			this.loggedId = loggedId;
 			this.personId = personId;

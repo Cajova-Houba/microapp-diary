@@ -7,12 +7,12 @@ import org.microapp.Diary.generic.dao.GenericAccessDao;
 import org.microapp.Diary.generic.service.impl.GenericAccessManagerImpl;
 import org.microapp.Diary.model.MemberInfo;
 import org.microapp.Diary.service.MemberInfoManager;
+import org.microapp.membernet.vo.MembershipVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yoso.dev.membernet.membership.domain.Membership;
 
 public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, Long>
 		implements MemberInfoManager {
@@ -54,7 +54,7 @@ public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, 
 	}
 
 	@Override
-	public MemberInfo getMemberInfo(Membership membership) {
+	public MemberInfo getMemberInfo(MembershipVO membership) {
 
 		long personId = membership.getId();
 
@@ -68,10 +68,10 @@ public class MemberInfoManagerImpl extends GenericAccessManagerImpl<MemberInfo, 
 	}
 
 	@Override
-	public List<MemberInfo> getMemberInfos(List<Membership> memberships) {
+	public List<MemberInfo> getMemberInfos(List<MembershipVO> memberships) {
 		
 		List<MemberInfo> infos = new ArrayList<MemberInfo>(memberships.size());
-		for(Membership m : memberships) {
+		for(MembershipVO m : memberships) {
 			infos.add(getMemberInfo(m));
 		}
 		

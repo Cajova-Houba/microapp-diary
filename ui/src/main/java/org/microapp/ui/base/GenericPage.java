@@ -4,28 +4,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -35,12 +16,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.membernet.MembernetManager;
+import org.microapp.membernet.vo.MembershipVO;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.diary.activity.DailyActivityPage;
-import org.microapp.ui.diary.activity.displayer.DailyRecordDisplayer;
 import org.microapp.ui.diary.coach.CoachPage;
 import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.membership.MembershipPage;
@@ -76,7 +56,7 @@ public class GenericPage extends WebPage {
 	private final String LOGGED_NAME_ID = "loggedName";
 	private final String LOGGED_NAME_LABEL_ID = "loggedName.label";
 	
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final transient Logger logger = LogManager.getLogger(getClass());
 	
 	protected StringBuilder errorMsgB;
 	
@@ -88,15 +68,9 @@ public class GenericPage extends WebPage {
 	protected String header;
 	
 	/**
-	 * Name of logged member to be displayed above the menu.
+	 * Logged member. Null if no member is logged in.
 	 */
-	protected String loggedName;
-	
-	/**
-	 * Logged member id. Null if no member is logged in.
-	 */
-	private Long loggedUserId;
-	private boolean isCouch;
+	protected MembershipVO logged;
 	
 	/**
 	 * By default used as home page button in main menu.
@@ -146,12 +120,9 @@ public class GenericPage extends WebPage {
 	protected void authenticate() {
 		DiarySession session = getAuthSession();
 		if (session.isSignedIn()) {
-			loggedUserId = session.getLoggedMemberId();
-			loggedName = membernetManager.getMembership(loggedUserId).getFullName();
-			isCouch = membernetManager.isAdmin(loggedUserId);
+			logged = membernetManager.getMembership(session.getLoggedMemberId());
 		} else {
-			loggedUserId = null;
-			isCouch = false;
+			logged = null;
 		}
 	}
 	
@@ -451,11 +422,7 @@ public class GenericPage extends WebPage {
 		this.headerModel = headerModel;
 	}
 	public String getLoggedName() {
-		return loggedName == null ? "" : loggedName;
-	}
-
-	public void setLoggedName(String loggedName) {
-		this.loggedName = loggedName;
+		return logged == null ? "" : logged.getName();
 	}
 
 	public IModel<String> getTitleModel() {
@@ -495,19 +462,15 @@ public class GenericPage extends WebPage {
 	 * @return
 	 */
 	public boolean isSignedIn() {
-		return loggedUserId != null;
+		return logged != null;
 	}
 
 	public Long getloggedUserId() {
-		return loggedUserId;
+		return logged == null ? null : logged.getId();
 	}
 
 	public boolean isCouch() {
-		return isCouch;
-	}
-
-	public void setCouch(boolean isCouch) {
-		this.isCouch = isCouch;
+		return logged == null ? false : logged.isIsSocietyAdmin();
 	}
 	
 	

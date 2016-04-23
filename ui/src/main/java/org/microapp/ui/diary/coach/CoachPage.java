@@ -5,14 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jasperreports.engine.xml.JRPenFactory.Bottom;
-
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.microapp.membernet.MembernetManager;
+import org.microapp.membernet.vo.MembershipVO;
+import org.microapp.membernet.vo.SocietyVO;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericPage;
@@ -22,20 +19,14 @@ import org.microapp.ui.base.genericTable.GenericTable;
 import org.microapp.ui.diary.coach.plans.MultiplePlansPage;
 import org.microapp.ui.diary.coach.report.CompleteReportPage;
 
-import com.yoso.dev.membernet.membership.domain.Membership;
-import com.yoso.dev.membernet.society.domain.Society;
-
 public class CoachPage extends GenericPage{
-	
+	private static final long serialVersionUID = 1L;
 	private final String HEADER_ID = "socName";
 	private final String TABLE_ID = "membersTable";
 	private final String COMPLETE_REPORT_ID = "complReportButton";
 	private final String MULTIPLE_PLANS_ID = "multiplePlansButton";
 	
-	@SpringBean
-	private MembernetManager membernetManager;
-	
-	private Society society;
+	private SocietyVO society;
 	
 	
 	@Override
@@ -56,10 +47,10 @@ public class CoachPage extends GenericPage{
 				app.restartResponseAtSignInPage();
 				
 				//check if is admin
-			} else if (membernetManager.getMembership(loggedId).isSocietyAdmin()) {
+			} else if (membernetManager.getMembership(loggedId).isIsSocietyAdmin()) {
 				
 				//load society
-				this.society = membernetManager.getMembership(loggedId).getUpper();
+				this.society = membernetManager.getMembership(loggedId).getSociety();
 				if (society == null) {
 					logger.debug("No society");
 				}
@@ -88,10 +79,10 @@ public class CoachPage extends GenericPage{
 		if (society == null) {
 			add(new Label(TABLE_ID,""));
 		} else {
-			List<String> fieldNames = Arrays.asList(new String[] {"id", "fullName"});
-			List<Membership> values = membernetManager.listAll(society.getSocietyId());
+			List<String> fieldNames = Arrays.asList(new String[] {"id", "name"});
+			List<MembershipVO> values = membernetManager.listAll(society.getId());
 			
-			MembersTable membersTable = new MembersTable(TABLE_ID, Membership.class, values, fieldNames, null);
+			MembersTable membersTable = new MembersTable(TABLE_ID, MembershipVO.class, values, fieldNames, null);
 			add(membersTable);
 		}
 	}

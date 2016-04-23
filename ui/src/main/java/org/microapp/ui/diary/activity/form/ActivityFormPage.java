@@ -138,6 +138,12 @@ public class ActivityFormPage extends GenericSecuredPage {
 			addComponents();
 		}
 		
+		@Override
+		protected void addComponents() {
+			super.addComponents();
+			add(new Label("forMember", getPersonName()));
+		}
+		
 		
 		@Override
 		protected void onSubmit() {

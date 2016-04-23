@@ -79,7 +79,7 @@ public class BaseActivityObject extends BaseObject {
 	 * @return Value converted to default unit.
 	 */
 	public double valueInDefaultUnit() {
-		if (getActivityUnit() == null ) {
+		if (getActivityUnit() == null || getActivityUnit() == ActivityUnit.NULL) {
 			return getValue();
 		} else {
 			return getValue() * getActivityUnit().getRatio();

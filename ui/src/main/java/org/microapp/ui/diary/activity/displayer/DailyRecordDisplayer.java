@@ -4,45 +4,34 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.wicket.Component;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.Diary.model.Activity;
 import org.microapp.Diary.model.DailyRecord;
-import org.microapp.Diary.service.ActivityManager;
 import org.microapp.Diary.service.DailyRecordManager;
 import org.microapp.ui.base.genericTable.ActivityValueColumn;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
-import org.microapp.ui.base.genericTable.CustomButton;
 import org.microapp.ui.base.genericTable.GenericTable;
 import org.microapp.ui.diary.activity.form.ActivityFormPage;
 import org.microapp.ui.diary.activity.report.DailyRecordReportPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.*;
 
 public class DailyRecordDisplayer extends Panel {
@@ -54,7 +43,7 @@ public class DailyRecordDisplayer extends Panel {
 	private final String REPORT_BTN_ID = "reportBtn";
 	private final String NO_ACTIVITY_ID = "noAct";
 	
-	private static final Logger logger = LogManager.getLogger(DailyRecordDisplayer.class);
+	protected final transient Logger logger = LogManager.getLogger(getClass());
 	
 	@SpringBean
 	private DailyRecordManager dailyRecordManager;
@@ -114,7 +103,7 @@ public class DailyRecordDisplayer extends Panel {
 				// TODO Auto-generated method stub
 				PageParameters params = new PageParameters();
 				params.add("date", selectedDate);
-				params.add("memberId",personId);
+				params.add("personId",personId);
 				
 				setResponsePage(ActivityFormPage.class,params);
 			}

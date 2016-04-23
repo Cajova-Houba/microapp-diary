@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.microapp.Diary.generic.service.GenericAccessManager;
 import org.microapp.Diary.model.MemberInfo;
-
-import com.yoso.dev.membernet.membership.domain.Membership;
+import org.microapp.membernet.vo.MembershipVO;
 
 public interface MemberInfoManager extends GenericAccessManager<MemberInfo, Long>{
 	
@@ -29,7 +28,7 @@ public interface MemberInfoManager extends GenericAccessManager<MemberInfo, Long
 	 * @param membership Membership.
 	 * @return Member info object for membership.
 	 */
-	public MemberInfo getMemberInfo(Membership membership);
+	public MemberInfo getMemberInfo(MembershipVO membership);
 	
 	/**
 	 * Creates a list of member info objects from memberships and returns it. If the
@@ -37,6 +36,6 @@ public interface MemberInfoManager extends GenericAccessManager<MemberInfo, Long
 	 * @param memberships Memberships.
 	 * @return List of member info objects for memberships.
 	 */
-	public List<MemberInfo> getMemberInfos(List<Membership> memberships);
+	public List<MemberInfo> getMemberInfos(List<MembershipVO> memberships);
 
 }

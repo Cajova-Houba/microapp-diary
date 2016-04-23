@@ -37,7 +37,14 @@ public class GoalManagerImpl extends GenericManagerImpl<Goal, Long> implements
 			sum += a.valueInDefaultUnit();
 		}
 		
-		g.setProgress(sum / g.valueInDefaultUnit());
+		double progress = sum / g.valueInDefaultUnit(); 
+		
+		
+		if(g.valueInDefaultUnit() == 0) {
+			g.setProgress(0);
+		} else {
+			g.setProgress(sum / g.valueInDefaultUnit());
+		}
 		
 		return g;
 	}

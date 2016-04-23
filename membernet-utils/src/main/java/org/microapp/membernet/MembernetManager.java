@@ -2,9 +2,19 @@ package org.microapp.membernet;
 
 import java.util.List;
 
-import com.yoso.dev.membernet.membership.domain.Membership;
+import javax.ws.rs.core.Response;
+
+import org.microapp.membernet.vo.MembershipVO;
+
 
 public interface MembernetManager {
+	
+	/**
+	 * Checks if the membership exists.
+	 * @param id Id of membership.
+	 * @return True if membership exists.
+	 */
+	public boolean exists(long id);
 	
 	/**
 	 * Check if the member with requesterId can access (view and change) the data of member with targetId.
@@ -18,24 +28,11 @@ public interface MembernetManager {
 	public boolean canAccess(long requesterId, long targetId);
 	
 	/**
-	 * Lists all memberships available.
-	 * @return List of memberships.
-	 */
-	public List<Membership> listAll();
-	
-	/**
-	 * List all membership in the society.
+	 * List all memberships in the society.
 	 * @param societyId Id of the society.
 	 * @return List of memberships.
 	 */
-	public List<Membership> listAll(long societyId);
-	
-	/**
-	 * Checks if the membership exists.
-	 * @param id Id of membership.
-	 * @return True if membership exists.
-	 */
-	public boolean exists(long id);
+	public List<MembershipVO> listAll(long societyId);
 	
 	/**
 	 * Returns true if the membership is an admin of society.
@@ -49,5 +46,12 @@ public interface MembernetManager {
 	 * @param memberId Id of membership.
 	 * @return Membership or null if it doesn't exist.
 	 */
-	public Membership getMembership(long memberId);
+	public MembershipVO getMembership(long memberId);
+	
+	/**
+	 * Public for testing purposes, remove in product version.
+	 * @param link
+	 * @return
+	 */
+	public Response getResponse(String link); 
 }

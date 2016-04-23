@@ -12,12 +12,6 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<!-- for @Autowired -->
 	<context:annotation-config />
 	
-	<!-- membernet-core -->
-	<import resource="classpath:applicationContext-dao.xml"/>
-	<import resource="classpath:applicationContext-resources.xml"/>
-	<import resource="classpath:applicationContext-service.xml"/>
-	<import resource="classpath:applicationContext.xml"/>
-	
 	<!-- services -->
 	<bean id="membernetManager" class="org.microapp.membernet.MembernetManagerImpl">
 	</bean>

@@ -8,8 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.microapp.Diary.generic.model.BaseAccessObject;
-
-import com.yoso.dev.membernet.membership.domain.Membership;
+import org.microapp.membernet.vo.MembershipVO;
 
 /**
  * Basic informations about member.
@@ -40,10 +39,10 @@ public class MemberInfo extends BaseAccessObject {
 		diaryEnabled = true;
 	}
 	
-	public MemberInfo(Membership membership) {
+	public MemberInfo(MembershipVO membership) {
 		this();
 		this.personId = membership.getId();
-		this.fullName = membership.getFullName();
+		this.fullName = membership.getName();
 	}
 	
 	/**

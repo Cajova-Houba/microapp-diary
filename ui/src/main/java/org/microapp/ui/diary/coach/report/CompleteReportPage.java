@@ -13,15 +13,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.Diary.model.MemberInfo;
 import org.microapp.Diary.service.MemberInfoManager;
+import org.microapp.membernet.vo.SocietyVO;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.base.form.MemberCheckBoxList;
 import org.microapp.ui.diary.coach.CoachPage;
 
-import com.yoso.dev.membernet.society.domain.Society;
-
 public class CompleteReportPage extends GenericSecuredPage {
+	private static final long serialVersionUID = 1L;
 
 	private final String REPORT_FORM_ID = "reportForm";
 	
@@ -47,14 +47,14 @@ public class CompleteReportPage extends GenericSecuredPage {
 			app.restartResponseAtSignInPage();
 			
 			//check if is admin
-		} else if (membernetManager.getMembership(loggedId).isSocietyAdmin()) {
+		} else if (membernetManager.getMembership(loggedId).isIsSocietyAdmin()) {
 			
 			//load society
-			Society society = membernetManager.getMembership(loggedId).getUpper();
+			SocietyVO society = membernetManager.getMembership(loggedId).getSociety();
 			if (society == null) {
 				logger.debug("No society");
 			} else {
-				this.societyId = society.getSocietyId();
+				this.societyId = society.getId();
 				logger.debug("User is admin of society with id: "+societyId);
 			}
 		} else {

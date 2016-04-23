@@ -183,6 +183,7 @@ public class PlanFormPage extends GenericSecuredPage {
 			};
 			deleteButton.setDefaultFormProcessing(false);
 			
+			add(new Label("forMember", getPersonName()));
 			add(new Label("header", new StringResourceModel("header.${headerKey}", Model.of(this))));
 			add(planName);
 			add(startDate);

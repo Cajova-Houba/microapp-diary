@@ -66,6 +66,8 @@ public class PlanDetailPage extends GenericSecuredPage {
 				logger.warn("Member with id: "+getloggedUserId()+" can't access "+plan+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
 			}
+			
+			person = membernetManager.getMembership(plan.getPersonId());
 		}
 	}
 	
@@ -82,7 +84,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 				}
 				
 			} catch (Exception e) {
-				addError("Error when parsin planId parameter. "+e.toString());
+				addError("Error when parsing planId parameter. "+e.toString());
 			}
 		} else {
 			addError("Parameter 'planId' not found");
@@ -143,6 +145,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 			public void onClick() {
 				PageParameters params = new PageParameters();
 				params.add("planId", planId);
+				params.add("personId", getPersonId());
 				
 				setResponsePage(GoalFormPage.class, params);
 			}
@@ -157,7 +160,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 			@Override
 			public void onClick() {
 				PageParameters params = new PageParameters();
-				params.add("personId", planManager.get(planId).getPersonId());
+				params.add("personId", getPersonId());
 				
 				setResponsePage(PlansPage.class, params);
 			};
@@ -177,6 +180,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 			public void onClick() {
 				PageParameters params = new PageParameters();
 				params.add("planId", planId);
+				params.add("personId", getPersonId());
 				setResponsePage(PlanFormPage.class, params);
 			}
 		};

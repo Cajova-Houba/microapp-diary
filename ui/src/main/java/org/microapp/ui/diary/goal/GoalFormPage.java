@@ -1,6 +1,7 @@
 package org.microapp.ui.diary.goal;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -49,8 +50,9 @@ public class GoalFormPage extends GenericSecuredPage {
 		loadPlanId(parameters);
 		
 		//check if member can access
+		long pId = Long.MIN_VALUE;
 		if (goalIdLoaded) {
-			long personId = goalManager.get(goalId).getPlan().getPersonId();
+			pId = goalManager.get(goalId).getPlan().getPersonId();
 			if (!canAccess(getloggedUserId(), personId)) {
 				logger.warn("Member with id: "+getloggedUserId()+" can't access "+goalManager.get(goalId)+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
@@ -58,12 +60,14 @@ public class GoalFormPage extends GenericSecuredPage {
 		}
 		
 		if (planIdLoaded) {
-			long pId = planManager.get(planId).getPersonId();
+			pId = planManager.get(planId).getPersonId();
 			if (!canAccess(getloggedUserId(), pId)) {
 				logger.warn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
 			}
 		}
+		
+		person = membernetManager.getMembership(pId);
 	}
 	
 	private void loadGoalId(PageParameters parameters) {
@@ -168,6 +172,13 @@ public class GoalFormPage extends GenericSecuredPage {
 			
 			addComponents();
 		}
+		
+		@Override
+		protected void addComponents() {
+			super.addComponents();
+			add(new Label("forMember", getPersonName()));
+		}
+		
 		@Override
 		protected void onSubmit() {
 			
@@ -182,6 +193,7 @@ public class GoalFormPage extends GenericSecuredPage {
 			//redirect back to plan detail
 			PageParameters params = new PageParameters();
 			params.add("planId", parent.getId());
+			params.add("personId", getPersonId());
 			setResponsePage(responsePage, params);
 		}
 		
@@ -192,6 +204,7 @@ public class GoalFormPage extends GenericSecuredPage {
 			//redirect back to plan detail
 			PageParameters params = new PageParameters();
 			params.add("planId", parent.getId());
+			params.add("personId", getPersonId());
 			setResponsePage(responsePage, params);
 		}
 		
@@ -209,6 +222,7 @@ public class GoalFormPage extends GenericSecuredPage {
 				//redirect back to plan detail
 				PageParameters params = new PageParameters();
 				params.add("planId", parent.getId());
+				params.add("personId", getPersonId());
 				setResponsePage(responsePage, params);
 			}
 		}

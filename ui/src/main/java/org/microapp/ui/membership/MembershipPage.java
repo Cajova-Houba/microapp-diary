@@ -1,35 +1,22 @@
 package org.microapp.ui.membership;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tools.ant.types.resources.StringResource;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.microapp.membernet.MembernetManager;
+import org.microapp.membernet.vo.MembershipVO;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.base.GenericPage;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
 import org.microapp.ui.base.genericTable.CustomButton;
 import org.microapp.ui.base.genericTable.GenericTable;
-
-import com.yoso.dev.membernet.member.domain.Member;
-import com.yoso.dev.membernet.membership.domain.Membership;
-import com.yoso.dev.membernet.society.domain.Society;
 
 
 public class MembershipPage extends GenericPage {
@@ -49,11 +36,14 @@ public class MembershipPage extends GenericPage {
 	
 	private void addMembershipTable(String tableID) {
 		
-		List<String> fieldNames = Arrays.asList(new String[] {"id", "lower.id", 
-								"upper.societyId", "lower.firstName", "lower.lastName",
-								"upper.name","societyAdmin","id"});
+		List<String> fieldNames = Arrays.asList(new String[]{"id","name","society.id","society.name","isSocietyAdmin"});
 		
-		MembershipTable table = new MembershipTable(tableID, Membership.class, membernetManager.listAll(), fieldNames, null);
+		List<MembershipVO> values = new ArrayList<MembershipVO>();
+		for(Integer societyId : Arrays.asList(-3,-2,-1,1,2,3)) {
+			values.addAll(membernetManager.listAll(societyId));
+		}
+		
+		MembershipTable table = new MembershipTable(tableID, MembershipVO.class, values, fieldNames, null);
 		
 		add(table);
 	}
