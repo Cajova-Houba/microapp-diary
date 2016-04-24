@@ -152,7 +152,7 @@ public class ActivityFormPage extends GenericSecuredPage {
 			
 			validate();
 			
-			logger.debug(this.object.toString());
+			formLogger.debug(this.object.toString());
 			
 			activityManager.save(object);
 			

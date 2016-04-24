@@ -4,6 +4,9 @@ import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -24,7 +27,11 @@ import org.microapp.Diary.model.enums.ActivityUnit;
 
 
 /**
- * A form component for activity based objects - Activity and Goal
+ * A form component for activity based objects - Activity and Goal.
+ * 
+ * When using this, be sure to have the 'confirmationMessage' property specified. This will be displayed when deleting
+ * the object.
+ * 
  * @param <T> Object to be displayed by form.
  * @param <P> Parent of displayed object.
  * @author Zdenda
@@ -32,7 +39,7 @@ import org.microapp.Diary.model.enums.ActivityUnit;
  */
 public abstract class AbstractActivityForm<T extends BaseActivityObject, P extends BaseObject> extends Form{
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final transient Logger formLogger = LogManager.getLogger(getClass());
 	
 	protected boolean newObject;
 	protected P parent;
@@ -62,7 +69,7 @@ public abstract class AbstractActivityForm<T extends BaseActivityObject, P exten
 	 */
 	public AbstractActivityForm(String id, String name, T object) {
 		super(id);
-		logger.debug("Editing existing object: "+object.toString());
+		formLogger.debug("Editing existing object: "+object.toString());
 		
 		this.name = name;
 		newObject = false;
@@ -78,7 +85,7 @@ public abstract class AbstractActivityForm<T extends BaseActivityObject, P exten
 	 */
 	public AbstractActivityForm(String id, String name, P parent) {
 		super(id);
-		logger.debug("Creating new object for parent: "+parent.toString());
+		formLogger.debug("Creating new object for parent: "+parent.toString());
 		
 		this.name = name;
 		newObject = true;
@@ -109,12 +116,17 @@ public abstract class AbstractActivityForm<T extends BaseActivityObject, P exten
 		cancelButton.setDefaultFormProcessing(false);
 		
 		deleteButton = new Button("deleteButton") {
+
 			@Override
 			public void onSubmit() {
 				onDelete();
 			}
 		};
 		deleteButton.setDefaultFormProcessing(false);
+		
+		if(!newObject) {
+			deleteButton.add(new AttributeAppender("onClick", "return confirm('"+new ResourceModel("confirmationMessage","Are you sure?").getObject()+"');"));
+		}
 		
 		
 		nameTf = new TextField("name", new PropertyModel<Activity>(this.object,"name"));

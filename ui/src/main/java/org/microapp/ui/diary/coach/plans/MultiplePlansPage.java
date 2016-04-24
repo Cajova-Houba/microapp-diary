@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
@@ -40,6 +41,7 @@ public class MultiplePlansPage extends GenericAdminPage {
 	
 	private final String PLANS_FORM_ID = "plansForm";
 	private final String GOAL_FORM_ID = "goalForm";
+	private final String FEEDBACK_ID = "feedback";
 	
 	
 	@SpringBean
@@ -113,23 +115,45 @@ public class MultiplePlansPage extends GenericAdminPage {
 			add(cancelBtn);
 			add(goalsTable);
 			add(goalForm);
+			add(new FeedbackPanel(FEEDBACK_ID));
 		}
 		
 		@Override
 		protected void onSubmit() {
 			logger.debug("Form submitted.");
 			
+			if(starts.getModelObject() == null) {
+				error("No starting date.");
+				return;
+			}
+			
+			if(ends.getModelObject() == null) {
+				error("No ending date.");
+				return;
+			}
+			
+			if(planName.getModelObject() == null || planName.getModelObject().toString().length() == 0) {
+				error("No plan name specified.");
+				return;
+			}
+			
+			
 			java.sql.Date startsDate = new java.sql.Date(starts.getModelObject().getTime());
 			java.sql.Date endsDate = new java.sql.Date(ends.getModelObject().getTime());
 			String name = planName.getModelObject().toString();
 			List<MemberInfo> selected = members.getSelected();
+			
+			if(selected == null || selected.size() == 0) {
+				error("No members selected.");
+				return;
+			}
+			
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
 			for(MemberInfo mi : selected) {
 				sb.append(mi.toString()+" ");
 			}
 			sb.append("]");
-			
 			StringBuilder sb2 = new StringBuilder();
 			sb2.append("[");
 			for(Goal g : goals) {
@@ -188,7 +212,6 @@ public class MultiplePlansPage extends GenericAdminPage {
 			
 			private void addComponents() {
 				TextField<String> nameTf = new TextField("goalName", new PropertyModel(this.getDefaultModel(), "name"));
-				nameTf.setRequired(true);
 				nameTf.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 					
 					@Override
@@ -200,7 +223,6 @@ public class MultiplePlansPage extends GenericAdminPage {
 				
 				NumberTextField<Double> valueTf = new NumberTextField<Double>("goalValue", new PropertyModel(this.getDefaultModel(), "value"));
 				valueTf.setStep(0.01);
-				valueTf.setRequired(true);
 				valueTf.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 					
 					@Override
@@ -211,7 +233,6 @@ public class MultiplePlansPage extends GenericAdminPage {
 				});
 				
 				DropDownChoice<ActivityType> actType = new DropDownChoice<ActivityType>("goalActType",new PropertyModel(this.getDefaultModel(),"activityType"), Arrays.asList(ActivityType.values()));
-				actType.setRequired(true);
 				actType.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 					
 					@Override
@@ -223,7 +244,6 @@ public class MultiplePlansPage extends GenericAdminPage {
 				
 				ChoiceRenderer choiceRenderer = new ChoiceRenderer("value", "key");
 				DropDownChoice<ActivityUnit> actUnit = new DropDownChoice<ActivityUnit>("goalActUnit",new PropertyModel(this.getDefaultModel(),"activityUnit"), Arrays.asList(ActivityUnit.values()), choiceRenderer);
-				actUnit.setRequired(true);
 				actUnit.add(new AjaxFormComponentUpdatingBehavior("onChange") {
 					
 					@Override

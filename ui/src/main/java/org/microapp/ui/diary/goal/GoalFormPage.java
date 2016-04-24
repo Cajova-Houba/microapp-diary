@@ -182,11 +182,11 @@ public class GoalFormPage extends GenericSecuredPage {
 		@Override
 		protected void onSubmit() {
 			
-			logger.debug("Submiting goal form.");
+			formLogger.debug("Submiting goal form.");
 			
 			validate();
 			
-			logger.debug(this.object.toString());
+			formLogger.debug(this.object.toString());
 			
 			goalManager.save(object);
 			
@@ -199,7 +199,7 @@ public class GoalFormPage extends GenericSecuredPage {
 		
 		@Override
 		protected void onCancel() {
-			logger.debug("Cancel pressed. Redirecting to plan page.");
+			formLogger.debug("Cancel pressed. Redirecting to plan page.");
 			
 			//redirect back to plan detail
 			PageParameters params = new PageParameters();
@@ -213,9 +213,9 @@ public class GoalFormPage extends GenericSecuredPage {
 			
 			if(newObject) {
 				//nothing to delete
-				logger.debug("No goal to delete.");
+				formLogger.debug("No goal to delete.");
 			} else {
-				logger.debug("Deleting goal with id="+object.getId());
+				formLogger.debug("Deleting goal with id="+object.getId());
 				
 				goalManager.remove(object.getId());
 				
