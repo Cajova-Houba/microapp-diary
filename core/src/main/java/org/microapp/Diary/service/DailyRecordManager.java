@@ -26,6 +26,17 @@ public interface DailyRecordManager extends GenericAccessManager<DailyRecord, Lo
 	public List<DailyRecord> getDailyRecords(Long memberID, Date after, Date before);
 	
 	/**
+	 * Returns a list of daily records from a certain date range. (inclusive)
+	 * 
+	 * Only the daily records containing any activities are listed.
+	 * @param after Include daily records from and after this date.
+	 * @param before Include daily records from and before this date. Must be before {@code after}, if it's not, exception will be thrown.
+	 * @param memberID Id of member daily records belongs to.
+	 * @return List of daily records. Empty if no records are found.
+	 */
+	public List<DailyRecord> getNonEmptyDailyRecords(Long memberID, Date after, Date before);
+	
+	/**
 	 * Returns a daily record for a certain date.
 	 * @param date Date.
 	 * @param memberID ID of member daily record belongs to.

@@ -1,17 +1,29 @@
 package org.microapp.ui.diary.coach.report;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javassist.bytecode.Mnemonic;
 
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.validation.validator.DateValidator;
 import org.microapp.Diary.model.MemberInfo;
 import org.microapp.Diary.service.MemberInfoManager;
+import org.microapp.Diary.service.ReportManager;
 import org.microapp.membernet.vo.SocietyVO;
 import org.microapp.ui.base.GenericAdminPage;
 import org.microapp.ui.base.form.MemberCheckBoxList;
@@ -27,6 +39,9 @@ public class CompleteReportPage extends GenericAdminPage {
 	@SpringBean
 	private MemberInfoManager memberInfoManager;
 	
+	@SpringBean
+	private ReportManager reportManager;
+	
 	public CompleteReportPage(PageParameters parameters) {
 		super(parameters);
 	}
@@ -38,7 +53,7 @@ public class CompleteReportPage extends GenericAdminPage {
 		//admin status is already verified in GenericAdminPage
 		SocietyVO society = logged.getSociety();
 		this.societyId = society.getId();
-		logger.debug("User is admin of society with id: "+societyId);
+		logDebug("User is admin of society with id: "+societyId);
 	}
 	
 	@Override
@@ -90,19 +105,47 @@ public class CompleteReportPage extends GenericAdminPage {
 			add(uncompleted);
 			add(members);
 			add(cancelBtn);
+			add(new FeedbackPanel("feedback"));
 		}
 		
 		@Override
 		protected void onSubmit() {
-			logger.debug("Form submitted.");
+			logDebug("Form submitted.");
 			
 			java.sql.Date aFrom = new java.sql.Date(actFrom.getModelObject().getTime());
 			java.sql.Date aTo = new java.sql.Date(actTo.getModelObject().getTime());
 			java.sql.Date pFrom = new java.sql.Date(planFrom.getModelObject().getTime());
 			java.sql.Date pTo = new java.sql.Date(planTo.getModelObject().getTime());
+			
+			//check dates
+			if(!aFrom.before(aTo)) {
+				error("Activity-from must be before activity-to");
+				return;
+			}
+			
+			if(!pFrom.before(pTo)) {
+				error("Plan-from must be before plan-to");
+				return;
+			}
+			
 			boolean comp = completed.getModelObject();
 			boolean uncomp = uncompleted.getModelObject();
+			
 			List<MemberInfo> selected = members.getSelected();
+			
+			//check that someone has been selected
+			if(selected.isEmpty()) {
+				error("No members selected.");
+				return;
+			}
+			
+			List<Long> personIds = new ArrayList<Long>();
+			for (MemberInfo mi : selected) {
+				if(membernetManager.exists(mi.getPersonId())) {
+					personIds.add(mi.getPersonId());
+				}
+			}
+			
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
 			for(MemberInfo mi : selected) {
@@ -110,13 +153,27 @@ public class CompleteReportPage extends GenericAdminPage {
 			}
 			sb.append("]");
 			
-			logger.debug(String.format("actFrom=%s, actTo=%s, planFrom=%s, planTo=%s, completed=%b, uncompleted=%b, selected=%s", 
+			logDebug(String.format("actFrom=%s, actTo=%s, planFrom=%s, planTo=%s, completed=%b, uncompleted=%b, selected=%s", 
 					aFrom, aTo, pFrom, pTo, comp, uncomp, sb.toString()));
 			
+			final byte[] pdf = reportManager.exportToPdf(reportManager.makeCompleteReportForMembers(personIds, pFrom, pTo, comp, uncomp, aFrom, aTo));
+			logDebug("Pdf generated");
+			
+			IResourceStream resStream = new AbstractResourceStreamWriter() {
+				
+				@Override
+				public void write(OutputStream output) throws IOException {
+					output.write(pdf);
+				}
+			};
+			
+			IRequestHandler handler = new ResourceStreamRequestHandler(resStream);
+			
+			getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 		}
 		
 		private void onCancel() {
-			logger.debug("Cancel pressed. Redirecting back to coach page.");
+			logDebug("Cancel pressed. Redirecting back to coach page.");
 			setResponsePage(CoachPage.class);
 		}
 	}

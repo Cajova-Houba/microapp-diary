@@ -20,12 +20,18 @@ import java.util.Map;
 
 
 
+
+
+
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.extensions.yui.calendar.DateField;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.ResourceLink;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
@@ -65,7 +71,7 @@ public class PlanReportPage extends GenericSecuredPage {
 	}
 	
 	private void onCancel() {
-		logger.debug("Cancel pressed, redirecting back to plans page.");
+		logDebug("Cancel pressed, redirecting back to plans page.");
 		
 		setResponsePage(PlansPage.class);
 	}
@@ -99,26 +105,27 @@ public class PlanReportPage extends GenericSecuredPage {
 			};
 			cancelBtn.setDefaultFormProcessing(false);
 			
-			
+			add(new Label("memberName", getPersonName()));
 			add(from);
 			add(to);
 			add(completed);
 			add(uncompleted);
 			add(cancelBtn);
+			add(new FeedbackPanel("feedback"));
 		}
 		
 		@Override
 		protected void onSubmit() {
-			logger.debug("Submitting report form.");
+			logDebug("Submitting report form.");
 			final java.sql.Date fromDate = new java.sql.Date(from.getDate().getTime());
 			final java.sql.Date toDate = new java.sql.Date(to.getDate().getTime());
 			final boolean comp = completed.getModelObject();
 			final boolean uncomp = uncompleted.getModelObject();
 			
-			logger.debug(String.format("from=%s, to=%s, completed=%b, uncompleted=%b", fromDate, toDate, comp, uncomp));
+			logDebug(String.format("from=%s, to=%s, completed=%b, uncompleted=%b", fromDate, toDate, comp, uncomp));
 			
 			final byte[] pdf = reportManager.exportToPdf(reportManager.makePlanReport(personId, fromDate, toDate, comp, uncomp));
-			logger.debug("Pdf generated");
+			logDebug("Pdf generated");
 			
 			IResourceStream resStream = new AbstractResourceStreamWriter() {
 				
@@ -134,7 +141,7 @@ public class PlanReportPage extends GenericSecuredPage {
 		}
 		
 		private void onCancel() {
-			logger.debug("Cancel pressed, redirecting back to plans page.");
+			logDebug("Cancel pressed, redirecting back to plans page.");
 			
 			setResponsePage(PlansPage.class);
 		}

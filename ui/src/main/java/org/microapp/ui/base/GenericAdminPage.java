@@ -22,7 +22,7 @@ public class GenericAdminPage extends GenericSecuredPage {
 	protected void authenticate() {
 		super.authenticate();
 		if(!isCoach()) {
-			logger.debug("Access denied for user id="+getloggedUserId()+". Redirecting home.");
+			logDebug("Access denied for user id="+getloggedUserId()+". Redirecting home.");
 			setResponsePage(HomePage.class);
 		}
 	}

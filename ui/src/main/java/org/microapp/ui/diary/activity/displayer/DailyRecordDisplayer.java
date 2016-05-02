@@ -43,7 +43,7 @@ public class DailyRecordDisplayer extends Panel {
 	private final String REPORT_BTN_ID = "reportBtn";
 	private final String NO_ACTIVITY_ID = "noAct";
 	
-	protected final transient Logger logger = LogManager.getLogger(getClass());
+	protected final static Logger logger = LogManager.getLogger(DailyRecordDisplayer.class);
 	
 	@SpringBean
 	private DailyRecordManager dailyRecordManager;
@@ -100,7 +100,6 @@ public class DailyRecordDisplayer extends Panel {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
 				PageParameters params = new PageParameters();
 				params.add("date", selectedDate);
 				params.add("personId",personId);
@@ -115,7 +114,10 @@ public class DailyRecordDisplayer extends Panel {
 		Link link = new Link(REPORT_BTN_ID) {
 			@Override
 			public void onClick() {
-				setResponsePage(DailyRecordReportPage.class);
+				PageParameters params = new PageParameters();
+				params.add("personId",personId);
+				
+				setResponsePage(DailyRecordReportPage.class, params);
 			}
 		};
 		add(link);

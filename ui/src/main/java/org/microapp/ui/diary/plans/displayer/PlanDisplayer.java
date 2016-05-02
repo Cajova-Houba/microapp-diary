@@ -22,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.Diary.model.Plan;
@@ -101,7 +102,10 @@ public class PlanDisplayer extends Panel {
 
 			@Override
 			public void onClick() {
-				setResponsePage(PlanReportPage.class);
+				PageParameters params = new PageParameters();
+				params.add("personId",personId);
+				
+				setResponsePage(PlanReportPage.class, params);
 			}
 		};
 		

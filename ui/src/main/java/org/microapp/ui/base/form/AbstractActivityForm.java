@@ -39,8 +39,6 @@ import org.microapp.Diary.model.enums.ActivityUnit;
  */
 public abstract class AbstractActivityForm<T extends BaseActivityObject, P extends BaseObject> extends Form{
 
-	protected final transient Logger formLogger = LogManager.getLogger(getClass());
-	
 	protected boolean newObject;
 	protected P parent;
 	protected T object;
@@ -69,7 +67,6 @@ public abstract class AbstractActivityForm<T extends BaseActivityObject, P exten
 	 */
 	public AbstractActivityForm(String id, String name, T object) {
 		super(id);
-		formLogger.debug("Editing existing object: "+object.toString());
 		
 		this.name = name;
 		newObject = false;
@@ -85,7 +82,6 @@ public abstract class AbstractActivityForm<T extends BaseActivityObject, P exten
 	 */
 	public AbstractActivityForm(String id, String name, P parent) {
 		super(id);
-		formLogger.debug("Creating new object for parent: "+parent.toString());
 		
 		this.name = name;
 		newObject = true;

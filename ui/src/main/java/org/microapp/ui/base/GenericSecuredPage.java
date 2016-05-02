@@ -39,7 +39,7 @@ public class GenericSecuredPage extends GenericPage {
 		//check if the user is logged and redirect to login page if isn't
 		AuthenticatedWebApplication app = (AuthenticatedWebApplication)WicketApplication.get();
 		if(!isSignedIn()) {
-			logger.debug("No user logged. Redirecting to membership page.");
+			logDebug("No user logged. Redirecting to membership page.");
 			app.restartResponseAtSignInPage();
 		}
 	}
@@ -69,16 +69,16 @@ public class GenericSecuredPage extends GenericPage {
 			boolean exists = person != null;
 			
 			if (!exists) {
-				logger.warn("Member with id: "+personId+" doesn't exist.");
+				logWarn("Member with id: "+personId+" doesn't exist.");
 			} else if(!canAccess) {
-				logger.warn("Logged member with id: "+getloggedUserId()+" can't access member with id: "+personId);
+				logWarn("Logged member with id: "+getloggedUserId()+" can't access member with id: "+personId);
 			}
 			
 			personIdLoaded = exists && canAccess;
 		} 
 		
 		if(!personIdLoaded) {
-			logger.debug("No personId loaded, use loggedId instead.");
+			logDebug("No personId loaded, use loggedId instead.");
 			personId = getloggedUserId();
 			person = logged;
 			personIdLoaded = true;

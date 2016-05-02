@@ -32,7 +32,7 @@ public class CoachPage extends GenericAdminPage{
 		
 		//admin status is already verified in GenericAdminPage
 		society = logged.getSociety();
-		logger.debug("User is admin of society with id: "+society.getId());
+		logDebug("User is admin of society with id: "+society.getId());
 	}
 	
 	@Override

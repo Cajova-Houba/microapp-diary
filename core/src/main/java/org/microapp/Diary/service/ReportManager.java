@@ -1,6 +1,7 @@
 package org.microapp.Diary.service;
 
 import java.sql.Date;
+import java.util.List;
 
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -52,6 +53,19 @@ public interface ReportManager {
 	 * @return Jasper print object which can then be exported to varius formats. If error occurs during reporting, null is returned.
 	 */
 	public JasperPrint makeCompleteReport(long personId, Date planAfter, Date planBefore, boolean completed, boolean uncompleted, Date drAfter, Date drBefore);
+	
+	/**
+	 * Will create a complete report for members.
+	 * @param personIds Id of persons included in report.
+	 * @param planAfter Include plans starting after this date (inclusive).
+	 * @param planBefore Include plans starting before this date (inclusive). Must be after {@code planAfter}.
+	 * @param completed Include completed plans.
+	 * @param uncompleted Include uncompleted plans.
+	 * @param drAfter Include daily records after this date (inclusive).
+	 * @param drBefore Include daily records before this date (inclusive). Must be after {@code drAfter}.
+	 * @return Jasper print object which can then be exported to varius formats. If error occurs during reporting, null is returned.
+	 */
+	public JasperPrint makeCompleteReportForMembers(List<Long> personIds, Date planAfter, Date planBefore, boolean completed, boolean uncompleted, Date drAfter, Date drBefore);
 	
 	/**
 	 * Exports the print to the pdf file.

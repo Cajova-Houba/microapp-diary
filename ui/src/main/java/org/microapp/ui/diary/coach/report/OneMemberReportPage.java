@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -17,11 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.microapp.Diary.service.ReportManager;
-import org.microapp.membernet.vo.SocietyVO;
-import org.microapp.ui.HomePage;
-import org.microapp.ui.WicketApplication;
 import org.microapp.ui.base.GenericAdminPage;
-import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.diary.coach.CoachPage;
 
 public class OneMemberReportPage extends GenericAdminPage {
@@ -84,11 +80,12 @@ public class OneMemberReportPage extends GenericAdminPage {
 			add(completed);
 			add(uncompleted);
 			add(cancelBtn);
+			add(new FeedbackPanel("feedback"));
 		}
 		
 		@Override
 		protected void onSubmit() {
-			logger.debug("Submitting form.");
+			logDebug("Submitting form.");
 			
 			java.sql.Date aFrom = new java.sql.Date(actFrom.getModelObject().getTime());
 			java.sql.Date aTo = new java.sql.Date(actTo.getModelObject().getTime());
@@ -97,11 +94,11 @@ public class OneMemberReportPage extends GenericAdminPage {
 			boolean comp = completed.getModelObject();
 			boolean uncomp = uncompleted.getModelObject();
 			
-			logger.debug(String.format("actFrom=%s, actTo=%s, planFrom=%s, planTo=%s, completed=%b, uncompleted=%b", 
+			logDebug(String.format("actFrom=%s, actTo=%s, planFrom=%s, planTo=%s, completed=%b, uncompleted=%b", 
 							aFrom, aTo, pFrom, pTo, comp, uncomp));
 			
 			final byte[] pdf = reportManager.exportToPdf(reportManager.makeCompleteReport(personId, pFrom, pTo, comp, uncomp, aFrom, aTo));
-			logger.debug("Pdf generated");
+			logDebug("Pdf generated");
 			
 			IResourceStream resStream = new AbstractResourceStreamWriter() {
 				
@@ -117,7 +114,7 @@ public class OneMemberReportPage extends GenericAdminPage {
 		}
 		
 		private void onCancel() {
-			logger.debug("Cancel pressed, redirecting back to coach page.");
+			logDebug("Cancel pressed, redirecting back to coach page.");
 			setResponsePage(CoachPage.class);
 		}
 	}

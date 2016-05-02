@@ -30,6 +30,12 @@ public class DailyRecordManagerImpl extends GenericAccessManagerImpl<DailyRecord
 		return dailyRecordDao.getDailyRecords(memberID, after, before);
 	}
 
+	@Override
+	public List<DailyRecord> getNonEmptyDailyRecords(Long memberID, Date after,
+			Date before) {
+		return dailyRecordDao.getNonEmptyDailyRecords(memberID, after, before);
+	}
+
 	@Transactional (
     		value = "transactionManagerDiary",
     		propagation = Propagation.REQUIRES_NEW

@@ -7,6 +7,7 @@ import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.diary.activity.displayer.DailyRecordDisplayer;
 
 public class DailyActivityPage extends GenericSecuredPage {
+	private static final long serialVersionUID = 1L;
 
 	private final String CONTENT_ID = "content";
 	

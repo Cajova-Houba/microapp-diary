@@ -19,7 +19,8 @@ import org.microapp.ui.diary.plans.detail.PlanDetailPage;
 
 
 public class GoalFormPage extends GenericSecuredPage {
-	
+	private static final long serialVersionUID = 1L;
+
 	private final String GOAL_FORM_ID = "goalForm";
 	
 	private long goalId;
@@ -54,7 +55,7 @@ public class GoalFormPage extends GenericSecuredPage {
 		if (goalIdLoaded) {
 			pId = goalManager.get(goalId).getPlan().getPersonId();
 			if (!canAccess(getloggedUserId(), personId)) {
-				logger.warn("Member with id: "+getloggedUserId()+" can't access "+goalManager.get(goalId)+". Redirecting back to plans page.");
+				logWarn("Member with id: "+getloggedUserId()+" can't access "+goalManager.get(goalId)+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
 			}
 		}
@@ -62,7 +63,7 @@ public class GoalFormPage extends GenericSecuredPage {
 		if (planIdLoaded) {
 			pId = planManager.get(planId).getPersonId();
 			if (!canAccess(getloggedUserId(), pId)) {
-				logger.warn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
+				logWarn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
 			}
 		}
@@ -80,11 +81,11 @@ public class GoalFormPage extends GenericSecuredPage {
 					goalIdLoaded = true;
 				} else {
 					addError("Goal does not exist.");
-					logger.debug("Goal does not exist.");
+					logDebug("Goal does not exist.");
 				}
 			} catch (Exception e) {
 				addError("Error while parsing 'goalId' parameter. "+e.toString());
-				logger.debug("Error while parsing 'goalId' parameter. "+e.toString());
+				logDebug("Error while parsing 'goalId' parameter. "+e.toString());
 			}
 		}
 	}
@@ -99,11 +100,11 @@ public class GoalFormPage extends GenericSecuredPage {
 					planIdLoaded = true;
 				} else {
 					addError("Plan does not exist.");
-					logger.debug("Plan does not exist.");
+					logDebug("Plan does not exist.");
 				}
 			} catch (Exception e) {
 				addError("Error while parsing 'planId' parameter. "+e.toString());
-				logger.debug("Error while parsing 'planId' parameter. "+e.toString());
+				logDebug("Error while parsing 'planId' parameter. "+e.toString());
 			}
 		}
 	}
@@ -133,7 +134,7 @@ public class GoalFormPage extends GenericSecuredPage {
 			if(planIdLoaded) {
 				add(new GoalForm(GOAL_FORM_ID, GOAL_FORM_ID, planManager.get(planId)));
 			} else {
-				logger.error("Error: Neither goalId or planId loaded, redirecting home.");
+				logError("Error: Neither goalId or planId loaded, redirecting home.");
 				setResponsePage(HomePage.class);
 			}
 		}
@@ -182,11 +183,11 @@ public class GoalFormPage extends GenericSecuredPage {
 		@Override
 		protected void onSubmit() {
 			
-			formLogger.debug("Submiting goal form.");
+			logDebug("Submiting goal form.");
 			
 			validate();
 			
-			formLogger.debug(this.object.toString());
+			logDebug(this.object.toString());
 			
 			goalManager.save(object);
 			
@@ -199,7 +200,7 @@ public class GoalFormPage extends GenericSecuredPage {
 		
 		@Override
 		protected void onCancel() {
-			formLogger.debug("Cancel pressed. Redirecting to plan page.");
+			logDebug("Cancel pressed. Redirecting to plan page.");
 			
 			//redirect back to plan detail
 			PageParameters params = new PageParameters();
@@ -213,9 +214,9 @@ public class GoalFormPage extends GenericSecuredPage {
 			
 			if(newObject) {
 				//nothing to delete
-				formLogger.debug("No goal to delete.");
+				logDebug("No goal to delete.");
 			} else {
-				formLogger.debug("Deleting goal with id="+object.getId());
+				logDebug("Deleting goal with id="+object.getId());
 				
 				goalManager.remove(object.getId());
 				

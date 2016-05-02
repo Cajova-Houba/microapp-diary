@@ -3,13 +3,11 @@ package org.microapp.ui.diary.plans.form;
 import java.sql.Date;
 import java.util.Calendar;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -19,11 +17,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.microapp.Diary.model.Plan;
 import org.microapp.Diary.service.PlanManager;
 import org.microapp.ui.HomePage;
-import org.microapp.ui.WicketApplication;
-import org.microapp.ui.base.GenericPage;
 import org.microapp.ui.base.GenericSecuredPage;
 import org.microapp.ui.diary.plans.PlansPage;
-import org.microapp.ui.diary.plans.detail.PlanDetailPage;
 
 public class PlanFormPage extends GenericSecuredPage {
 
@@ -54,7 +49,7 @@ public class PlanFormPage extends GenericSecuredPage {
 		if (planIdLoaded) {
 			long pId = planManager.get(planId).getPersonId();
 			if (!canAccess(getloggedUserId(), pId)) {
-				logger.warn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
+				logWarn("Member with id: "+getloggedUserId()+" can't access "+planManager.get(planId)+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
 			}
 		}
@@ -68,7 +63,7 @@ public class PlanFormPage extends GenericSecuredPage {
 			planIdLoaded = planManager.exists(planId);
 			
 			if (planIdLoaded) {
-				logger.debug("PlanId = "+planId+" loaded.");
+				logDebug("PlanId = "+planId+" loaded.");
 			}
 		}
 	}
@@ -97,7 +92,7 @@ public class PlanFormPage extends GenericSecuredPage {
 		} else if (personIdLoaded) {
 			add(new PlanForm(PLAN_FORM_ID, personId));
 		} else {
-			logger.error("Error: Neither planId or personId loaded, redirecting home.");
+			logError("Error: Neither planId or personId loaded, redirecting home.");
 			setResponsePage(HomePage.class);
 		}
 	}
@@ -123,7 +118,7 @@ public class PlanFormPage extends GenericSecuredPage {
 		public PlanForm(String id, Plan plan) {
 			super(id);
 			
-			logger.debug("Editing plan with id="+plan.getId());
+			logDebug("Editing plan with id="+plan.getId());
 			
 			this.newPlan = false;
 			this.plan = plan;
@@ -141,7 +136,7 @@ public class PlanFormPage extends GenericSecuredPage {
 		public PlanForm(String id, long personId) {
 			super(id);
 			
-			logger.debug("Creating new plan for person with id="+personId);
+			logDebug("Creating new plan for person with id="+personId);
 			
 			this.newPlan = true;
 			this.headerKey = "new";
@@ -195,11 +190,11 @@ public class PlanFormPage extends GenericSecuredPage {
 		@Override
 		protected void onSubmit() {
 			
-			logger.debug("Submitting form.");
+			logDebug("Submitting form.");
 			
 			validate();
 			
-			logger.debug("Plan: id="+plan.getId()+" name="+plan.getName());
+			logDebug("Plan: id="+plan.getId()+" name="+plan.getName());
 			
 			planManager.save(plan);
 			
@@ -212,7 +207,7 @@ public class PlanFormPage extends GenericSecuredPage {
 		
 		private void onCancel() {
 			
-			logger.debug("Cancel pressed. Redirecting to plans page.");
+			logDebug("Cancel pressed. Redirecting to plans page.");
 			//redirect to plans page
 			PageParameters params = new PageParameters();
 			params.add("personId",personId);
@@ -223,9 +218,9 @@ public class PlanFormPage extends GenericSecuredPage {
 			
 			if(newPlan) {
 				//nothing to delete
-				logger.debug("No plan to delete.");
+				logDebug("No plan to delete.");
 			} else {
-				logger.debug("Deleting plan with id="+plan.getId());
+				logDebug("Deleting plan with id="+plan.getId());
 				
 				planManager.remove(plan.getId());
 				

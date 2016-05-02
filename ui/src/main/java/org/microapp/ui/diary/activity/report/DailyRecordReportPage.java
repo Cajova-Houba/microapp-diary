@@ -6,8 +6,10 @@ import java.util.Date;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.extensions.yui.calendar.DateField;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -67,21 +69,23 @@ public class DailyRecordReportPage extends GenericSecuredPage {
 			};
 			cancelButton.setDefaultFormProcessing(false);
 			
+			add(new Label("memberName", getPersonName()));
 			add(from);
 			add(to);
 			add(cancelButton);
+			add(new FeedbackPanel("feedback"));
 		}
 		
 		@Override
 		protected void onSubmit() {
-			logger.debug("Submitting form");
+			logDebug("Submitting form");
 			
 			java.sql.Date fromDate = new java.sql.Date(from.getModelObject().getTime());
 			java.sql.Date toDate = new java.sql.Date(to.getModelObject().getTime());
-			logger.debug(String.format("from=%s, to=%s", fromDate, toDate));
+			logDebug(String.format("from=%s, to=%s", fromDate, toDate));
 			
 			final byte[] pdf = reportManager.exportToPdf(reportManager.makeDailyRecordReport(personId, fromDate, toDate));
-			logger.debug("Pdf generated");
+			logDebug("Pdf generated");
 			
 			IResourceStream resStream = new AbstractResourceStreamWriter() {
 				
@@ -97,7 +101,7 @@ public class DailyRecordReportPage extends GenericSecuredPage {
 		}
 		
 		private void onCancel() {
-			logger.debug("Cancel pressed, redirecting back daily activities page.");
+			logDebug("Cancel pressed, redirecting back daily activities page.");
 			
 			setResponsePage(PlansPage.class);
 		}

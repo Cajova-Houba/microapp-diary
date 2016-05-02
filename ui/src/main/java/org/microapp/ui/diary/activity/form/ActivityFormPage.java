@@ -107,7 +107,7 @@ public class ActivityFormPage extends GenericSecuredPage {
 			add(new ActivityForm(formId, formId, dailyRecordManager.getDailyRecordFrom(date, personId)));
 		} else {
 			//error back to homepage
-			logger.error("Error: Neither activityId or date and memberId loaded, redirecting home.");
+			logError("Error: Neither activityId or date and memberId loaded, redirecting home.");
 			setResponsePage(HomePage.class);
 		}
 	}
@@ -148,11 +148,11 @@ public class ActivityFormPage extends GenericSecuredPage {
 		@Override
 		protected void onSubmit() {
 			
-			logger.debug("Submiting activity form");
+			logDebug("Submiting activity form");
 			
 			validate();
 			
-			formLogger.debug(this.object.toString());
+			logDebug(this.object.toString());
 			
 			activityManager.save(object);
 			
@@ -172,7 +172,7 @@ public class ActivityFormPage extends GenericSecuredPage {
 		@Override
 		protected void onCancel() {
 			
-			logger.debug("Cancel pressed. Redirecting to diary page.");
+			logDebug("Cancel pressed. Redirecting to diary page.");
 			
 			//redirect to diary page
 			PageParameters params = new PageParameters();
@@ -192,9 +192,9 @@ public class ActivityFormPage extends GenericSecuredPage {
 			
 			//nothing to delete
 			if (newObject) {
-				logger.debug("No activity to delete.");
+				logDebug("No activity to delete.");
 			} else {
-				logger.debug("Deleting activity: "+object.toString());
+				logDebug("Deleting activity: "+object.toString());
 				
 				activityManager.remove(object.getId());
 				

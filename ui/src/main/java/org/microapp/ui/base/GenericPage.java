@@ -22,6 +22,7 @@ import org.microapp.membernet.MembernetManager;
 import org.microapp.membernet.vo.MembershipVO;
 import org.microapp.ui.HomePage;
 import org.microapp.ui.base.menu.GenericMenu;
+import org.microapp.ui.base.menu.MenuItem;
 import org.microapp.ui.diary.activity.DailyActivityPage;
 import org.microapp.ui.diary.coach.CoachPage;
 import org.microapp.ui.diary.plans.PlansPage;
@@ -181,7 +182,7 @@ public class GenericPage extends WebPage {
 			linkNames.add("coach");
 		}
 		
-		GenericMenu mainMenu = new GenericMenu(MAIN_MENU_ID, linkNames);
+		GenericMenu mainMenu = new GenericMenu(MAIN_MENU_ID, MenuItem.fromStringList(linkNames));
 		add(mainMenu);
 	}
 	
@@ -209,19 +210,19 @@ public class GenericPage extends WebPage {
 		if(!parameters.get(paramName).isNull()) {
 			try {
 				paramValue = Long.parseLong(parameters.get(paramName).toString());
-				logger.debug("Parameter '"+paramName+"' loaded with value: "+paramValue);
+				logDebug("Parameter '"+paramName+"' loaded with value: "+paramValue);
 			} catch (Exception e) {
 				String msg = "Error when parsing parameter '"+paramName+"'. "+e.toString();
 				addError(msg);
-				logger.warn(msg);
+				logWarn(msg);
 			}
 			
 		} else if(required) {
 			String msg = "Parameter '"+paramName+"' not found.";
 			addError(msg);
-			logger.warn(msg);
+			logWarn(msg);
 		} else {
-			logger.debug("Parameter '"+paramName+"' is null.");
+			logDebug("Parameter '"+paramName+"' is null.");
 		}
 		
 		
@@ -247,7 +248,7 @@ public class GenericPage extends WebPage {
 		} else if(required) {
 			String msg = "Parameter '"+paramName+"' not found.";
 			addError(msg);
-			logger.warn(msg);
+			logWarn(msg);
 		}
 		
 		return paramValue;
@@ -271,12 +272,12 @@ public class GenericPage extends WebPage {
 			} catch (Exception e) {
 				String msg = "Error when parsing parameter '"+paramName+"'. "+e.toString();
 				addError(msg);
-				logger.warn(msg);
+				logWarn(msg);
 			}
 		} else if (required) {
 			String msg = "Parameter '"+paramName+"' not found.";
 			addError(msg);
-			logger.warn(msg);
+			logWarn(msg);
 		}
 		
 		return paramValue;
@@ -300,12 +301,12 @@ public class GenericPage extends WebPage {
 			} catch (Exception e) {
 				String msg = "Error when parsing parameter '"+paramName+"'. "+e.toString();
 				addError(msg);
-				logger.warn(msg);
+				logWarn(msg);
 			}
 		} else if (required) {
 			String msg = "Parameter '"+paramName+"' not found.";
 			addError(msg);
-			logger.warn(msg);
+			logWarn(msg);
 		}
 		
 		return paramValue;
@@ -397,6 +398,34 @@ public class GenericPage extends WebPage {
 		return logged == null ? false : logged.isIsSocietyAdmin();
 	}
 	
+	protected void logDebug(String msg) {
+		if(logger != null) {
+			logger.debug(msg);
+		}
+	}
 	
+	protected void logError(String msg) {
+		if(logger != null) {
+			logger.error(msg);
+		}
+	}
+	
+	protected void logWarn(String msg) {
+		if(logger != null) {
+			logger.warn(msg);
+		}
+	}
+	
+	protected void logTrace(String msg) {
+		if(logger != null) {
+			logger.trace(msg);
+		}
+	}
+	
+	protected void logInfo(String msg) {
+		if(logger != null) {
+			logger.info(msg);
+		}
+	}
 	
 }

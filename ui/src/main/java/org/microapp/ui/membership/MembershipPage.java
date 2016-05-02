@@ -73,7 +73,7 @@ public class MembershipPage extends GenericPage {
 						@Override
 						public void onClick() {
 							String id = getDataModel(rowModel).getObject().toString();
-							logger.debug("Log as member with id="+id);
+							logDebug("Log as member with id="+id);
 							
 							boolean authRes = AuthenticatedWebSession.get().signIn(id, null);
 							

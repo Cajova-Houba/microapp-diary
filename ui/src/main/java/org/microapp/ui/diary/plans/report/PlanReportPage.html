@@ -4,6 +4,10 @@
 			<h3><wicket:message key="form.header" /></h3>
 			<table>
 				<tr>
+					<td>Member: </td>
+					<td><span wicket:id="memberName"></span></td>
+				</tr>
+				<tr>
 					<td><wicket:message key="from"/></td>
 					<td><span wicket:id="from"></span></td>
 				</tr>
@@ -21,8 +25,11 @@
 				</tr>
 			</table>
 			
-			<input type="submit" id="commonButton" wicket:message="value:reportBtn.caption" onclick="this.form.target='_blank'">
+			<input type="submit" id="commonButton" wicket:message="value:reportBtn.caption" onclick="this.form.target=''">
 			<button id="commonButton" wicket:id="cancelBtn"  onclick="this.form.target=''"><wicket:message key="cancelBtn.caption" /></button>
+		
+			<div wicket:id="feedback">
+			</div>
 		</form>
 	</div>
 </wicket:extend>

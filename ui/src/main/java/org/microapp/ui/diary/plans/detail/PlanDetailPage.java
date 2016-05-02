@@ -1,29 +1,21 @@
 package org.microapp.ui.diary.plans.detail;
-
-
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.hibernate.search.backend.AddLuceneWork;
 import org.microapp.Diary.model.Goal;
 import org.microapp.Diary.model.Plan;
 import org.microapp.Diary.service.GoalManager;
 import org.microapp.Diary.service.PlanManager;
-import org.microapp.ui.WicketApplication;
-import org.microapp.ui.base.GenericPage;
 import org.microapp.ui.base.GenericSecuredPage;
-import org.microapp.ui.base.converters.SqlDateConverter;
 import org.microapp.ui.base.genericTable.ActivityValueColumn;
 import org.microapp.ui.base.genericTable.ButtonColumn;
 import org.microapp.ui.base.genericTable.ComponentColumn;
@@ -34,7 +26,8 @@ import org.microapp.ui.diary.plans.PlansPage;
 import org.microapp.ui.diary.plans.form.PlanFormPage;
 
 public class PlanDetailPage extends GenericSecuredPage {
-
+	private static final long serialVersionUID = 1L;
+	
 	private long planId;
 	private boolean planIdLoaded;
 
@@ -67,7 +60,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 			plan = planManager.get(planId);
 			
 			if (!canAccess(getloggedUserId(), plan.getPersonId())) {
-				logger.warn("Member with id: "+getloggedUserId()+" can't access "+plan+". Redirecting back to plans page.");
+				logWarn("Member with id: "+getloggedUserId()+" can't access "+plan+". Redirecting back to plans page.");
 				setResponsePage(PlansPage.class);
 			}
 			
@@ -112,7 +105,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 		if (planIdLoaded) {
 			
 			List<Goal> values = goalManager.getUncompletedGoalsForPlan(planId);
-			logger.debug(values.size()+" goals loaded.");
+			logDebug(values.size()+" goals loaded.");
 			
 			GenericTable goalTable = new GenericTable(GOAL_TABLE_ID, Goal.class, values, Arrays.asList("id","activityType"), null) {
 				
@@ -222,7 +215,7 @@ public class PlanDetailPage extends GenericSecuredPage {
 			add(new Label(PLAN_NAME_ID,new PropertyModel<String>(plan, "name")));
 			add(new Label(PLAN_FROM_ID,new PropertyModel<Date>(plan, "startDate")));
 			add(new Label(PLAN_TO_ID,new PropertyModel<Date>(plan, "endDate")));
-			add(new Label(PLAN_COMPLETED_ID, new StringResourceModel("completed.${completed}", new Model(plan), "completed")));
+			add(new Label(PLAN_COMPLETED_ID, new StringResourceModel("completed.${completed}", new Model(plan))));
 		} else {
 			add(new Label(PLAN_NAME_ID,"Plan name"));
 			add(new Label(PLAN_FROM_ID,"date"));

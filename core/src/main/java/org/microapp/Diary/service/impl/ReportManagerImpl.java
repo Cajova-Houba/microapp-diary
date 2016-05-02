@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.microapp.Diary.model.DailyRecord;
+import org.microapp.Diary.model.MemberInfo;
 import org.microapp.Diary.model.Plan;
 import org.microapp.Diary.service.DailyRecordManager;
 import org.microapp.Diary.service.MemberInfoManager;
@@ -106,7 +108,7 @@ public class ReportManagerImpl implements ReportManager {
 				personId, after.toString(), before.toString()));
 		
 		//load daily records
-		List<DailyRecord> drs = drManager.getDailyRecords(personId, after, before);
+		List<DailyRecord> drs = drManager.getNonEmptyDailyRecords(personId, after, before);
 		logger.debug(drs.size()+" daily records loaded.");
 		
 		//create data source
@@ -114,7 +116,13 @@ public class ReportManagerImpl implements ReportManager {
 		Map parameters = new HashMap();
 		
 		parameters.put("memberId", personId);
-		parameters.put("memberName", memberInfoManager.get(personId).getFullName());
+		List<MemberInfo> mi = memberInfoManager.getAllForPerson(personId);
+		String name;
+		if(mi.isEmpty()){
+			name = "unknown";
+		} else {
+			parameters.put("memberName", mi.get(0).getFullName());
+		}
 		
 		//fill the report
 		try {
@@ -158,6 +166,33 @@ public class ReportManagerImpl implements ReportManager {
 		}
 		
 		return planReport;
+	}
+	
+	
+
+	@Override
+	public JasperPrint makeCompleteReportForMembers(List<Long> personIds,
+			Date planAfter, Date planBefore, boolean completed,
+			boolean uncompleted, Date drAfter, Date drBefore) {
+
+		if(personIds.isEmpty()) {
+			return new JasperPrint();
+		}
+	
+		JasperPrint completeReport = makeCompleteReport(personIds.get(0), planAfter, planBefore, completed, uncompleted, drAfter, drBefore);
+		
+		if(personIds.size() > 1) {
+			for (Iterator iterator = personIds.subList(1, personIds.size()).iterator(); iterator.hasNext();) {
+				Long personId = (Long) iterator.next();
+				JasperPrint tmp = makeCompleteReport(personId, planAfter, planBefore, completed, uncompleted, drAfter, drBefore);
+				
+				for(JRPrintPage page : tmp.getPages()) {
+					completeReport.addPage(page);
+				}
+			}
+		}
+		
+		return completeReport;
 	}
 
 	@Override

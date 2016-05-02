@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.form.Button;
@@ -57,7 +56,7 @@ public class MultiplePlansPage extends GenericAdminPage {
 		//admin status is already verified in GenericAdminPage
 		SocietyVO society = logged.getSociety();
 		this.societyId = society.getId();
-		logger.debug("User is admin of society with id: "+societyId);
+		logDebug("User is admin of society with id: "+societyId);
 	}
 	
 	@Override
@@ -120,7 +119,7 @@ public class MultiplePlansPage extends GenericAdminPage {
 		
 		@Override
 		protected void onSubmit() {
-			logger.debug("Form submitted.");
+			logDebug("Form submitted.");
 			
 			if(starts.getModelObject() == null) {
 				error("No starting date.");
@@ -161,7 +160,7 @@ public class MultiplePlansPage extends GenericAdminPage {
 			}
 			sb2.append("]");
 			
-			logger.debug(String.format("name=%s, starts=%s, ends=%s, goals=%s, selected=%s", name, startsDate, endsDate, sb2.toString(), sb.toString()));
+			logDebug(String.format("name=%s, starts=%s, ends=%s, goals=%s, selected=%s", name, startsDate, endsDate, sb2.toString(), sb.toString()));
 			
 			//create and save plans
 //			List<Plan> plans = new ArrayList<Plan>();
@@ -176,17 +175,17 @@ public class MultiplePlansPage extends GenericAdminPage {
 				p.setGoals(goals);
 				
 				
-				logger.debug("Saving plan: "+p);
+				logDebug("Saving plan: "+p);
 				planManager.save(p);
-				logger.debug("Saved.");
+				logDebug("Saved.");
 			}
 			
-			logger.debug("Plans saved, redirecting back to the coach page.");
+			logDebug("Plans saved, redirecting back to the coach page.");
 			setResponsePage(CoachPage.class);
 		}
 		
 		private void onCancel() {
-			logger.debug("Cancel pressed. Redirecting back to coach page.");
+			logDebug("Cancel pressed. Redirecting back to coach page.");
 			setResponsePage(CoachPage.class);
 		}
 		
@@ -257,7 +256,7 @@ public class MultiplePlansPage extends GenericAdminPage {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						Goal g = ((Goal)form.getModelObject()).clone();
-						logger.debug("Adding goal: "+g);
+						logDebug("Adding goal: "+g);
 						goals.add(g);
 						target.add(displayTable);
 					}
